@@ -28,22 +28,7 @@ mongoose.connect('mongodb://ttcc-admin:aquilina123@ds239071.mlab.com:39071/ttcc-
 
 
 app.get('/test', function(req, res){
-    var newDistrict = {
-        name: "Opera Oasis",
-        cogs_attacking: "Spin Doctor"
-    };
-    InvasionHistory.aggregate([
-        {
-            
-            $lookup: {
-                from: "invasionlogs",
-                localField: "started_ref",
-                foreignField: "_id", // <-- reference field from country collection
-                as: "log"
-            }
-        },
-        { "$match": { "log.name": newDistrict.name, "log.cogs_attacking": newDistrict.cogs_attacking/*, "logs.created": { $gte: createdMin, $lte: createdMax }*/ } }
-    ]).exec(function(err, history){
+    InvasionHistory.find().populate('started_ref', null, InvasionLog).exec(function(err, history){
         if(err)
             res.status(400).send(err);
         else
@@ -119,28 +104,25 @@ var requestLoop = setInterval(function(){
                             let createdMin = moment(newDistrict.created).subtract(30, 'minutes').toDate();
                             if(newDistrict.cogs_attacking !== 'None')
                             {
-                                console.log(newDistrict.name + ' - ' + newDistrict.cogs_attacking);
-                                InvasionHistory.aggregate([
-                                    { $sort : { started: -1 } },
-                                    {
-                                        $lookup: {
-                                            from: "invasionlogs",
-                                            localField: "started_ref",
-                                            foreignField: "_id", // <-- reference field from country collection
-                                            as: "log"
-                                        }
-                                    },
-                                    { "$match": { "log.name": newDistrict.name, "log.cogs_attacking": newDistrict.cogs_attacking, "log.created": { $gte: createdMin } } }
-                                ]).exec(function(err, history){
+                                
+                                InvasionHistory.findOne({ name: newDistrict.name, cogs_attacking: newDistrict.cogs_attacking, started: { $gte: createdMin, $lte: createdMax } }).sort({created: -1})
+                                .exec(function(err, history){
                                     if(err)
                                     {
                                         console.log('InvasionHistory Error: Finding History');
                                     }
                                     else
                                     {
-                                        if(history.length == 0)
+                                        if(!history)
                                         {
-                                            var newEntry = new InvasionHistory({ started_ref: newDistrict._id, started: newDistrict.created });
+                                            var newEntry = new InvasionHistory({ 
+                                                name: newDistrict.name,
+                                                population: newDistrict.population, 
+                                                cogs_attacking: newDistrict.cogs_attacking, 
+                                                cogs_type: newDistrict.cogs_type, 
+                                                count_total: newDistrict.count_total, 
+                                                started: newDistrict.created 
+                                            });
                                             newEntry.save(function(err){
                                                 if(err)
                                                 {
@@ -153,14 +135,15 @@ var requestLoop = setInterval(function(){
                                         }
                                         else
                                         {
-                                            console.log('InvasionHistory Notice: Start already logged.');
+                                            console.log('InvasionHistory Notice: Start already logged. (' + newDistrict.name + ' - ' + newDistrict.cogs_attacking + ')');
                                         }
                                     }
                                 });
                             }
                             else
                             {
-                                InvasionHistory.findOne({ name: newDistrict.name, created: { $gte: createdMin, $lte: createdMax } }).populate('started_ref').sort({ created: -1}).exec(function(err, history){
+                                InvasionHistory.findOne({ name: newDistrict.name, started: { $gte: createdMin, $lte: createdMax } }).sort({ created: -1})
+                                .exec(function(err, history){
                                     if(err)
                                     {
                                         console.log('InvasionHistory Error: Finding History');
@@ -169,8 +152,9 @@ var requestLoop = setInterval(function(){
                                     {
                                         if(history)
                                         {
+                                            console.log(newDistrict.name);
                                             console.log(history);
-                                            console.log('passed still?');
+                                            return;
                                             InvasionLog.findOne({ name: newDistrict.name, cogs_attacking: history.started_ref.cogs_attacking }).sort({created: -1}).exec(function(err, log){
                                                 if(err)
                                                 {
@@ -181,7 +165,10 @@ var requestLoop = setInterval(function(){
                                                     if(log)
                                                     {
                                                         history.ended = Date.now();
-                                                        history.ended_ref = log._id;
+                                                        if(history.population < log.population)
+                                                            history.population = log.population;
+
+                                                        history.count_defeated = log.count_defeated;                                                        
                                                         history.save(function(err){
                                                             if(err)
                                                                 console.log('InvasionHistory Error: Updating History');

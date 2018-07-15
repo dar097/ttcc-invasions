@@ -1,14 +1,12 @@
 var mongoose = require('mongoose');
 
 var HistorySchema = new mongoose.Schema({
-    started_ref: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'InvasionLogs'
-    },
-    ended_ref: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'InvasionLogs'
-    },
+    name: String,
+    population: Number,
+    cogs_attacking: String,
+    cogs_type: String,
+    count_defeated: Number,
+    count_total: Number,
     started: Date,
     ended: Date
 });
