@@ -142,7 +142,7 @@ var requestLoop = setInterval(function(){
                             }
                             else
                             {
-                                InvasionHistory.findOne({ name: newDistrict.name, started: { $gte: createdMin, $lte: createdMax } }).sort({ created: -1})
+                                InvasionHistory.findOne({ name: newDistrict.name, started: { $gte: createdMin, $lte: createdMax }, ended: null }).sort({ created: -1})
                                 .exec(function(err, history){
                                     if(err)
                                     {
@@ -152,10 +152,9 @@ var requestLoop = setInterval(function(){
                                     {
                                         if(history)
                                         {
-                                            console.log(newDistrict.name);
+                                            console.log(newDistrict.name + ' - ' + newDistrict.cogs_attacking);
                                             console.log(history);
-                                            return;
-                                            InvasionLog.findOne({ name: newDistrict.name, cogs_attacking: history.started_ref.cogs_attacking }).sort({created: -1}).exec(function(err, log){
+                                            InvasionLog.findOne({ name: newDistrict.name, cogs_attacking: history.cogs_attacking }).sort({created: -1}).exec(function(err, log){
                                                 if(err)
                                                 {
                                                     console.log('InvasionHistory Error: Finding Log');

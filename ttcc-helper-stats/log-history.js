@@ -8,7 +8,10 @@ var HistorySchema = new mongoose.Schema({
     count_defeated: Number,
     count_total: Number,
     started: Date,
-    ended: Date
+    ended: {
+        type: Date,
+        default: null
+    }
 });
 
 module.exports = mongoose.model('InvasionHistory', HistorySchema);
