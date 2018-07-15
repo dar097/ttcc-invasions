@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Test 1",
+        "population": 20,
+        "invasion_online": "true",
+        "last_update": "",
+        "cogs_attacking": "Flunky",
+        "count_defeated": 20,
+        "count_total": 100,
+        "remaining_time": 62
+    },
+	{
+        "name": "Test 2",
+        "population": 20,
+        "invasion_online": "false",
+        "last_update": "",
+        "cogs_attacking": "",
+        "count_defeated": 0,
+        "count_total": 0,
+        "remaining_time": 0
+    },
+	{
+        "name": "Test 3",
+        "population": 50,
+        "invasion_online": "true",
+        "last_update": "",
+        "cogs_attacking": "Spunky Spunky Spunky",
+        "count_defeated": 10100,
+        "count_total": 10000,
+        "remaining_time": 62
+    }
+]

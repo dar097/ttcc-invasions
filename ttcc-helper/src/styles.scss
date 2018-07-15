@@ -1,0 +1,72 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./fonts/fonts.scss";
+
+@font-face {
+    font-family: ToonSpeak;
+    src: url(./fonts/Impress.ttf);
+}
+
+* {
+    font-family: ToonSpeak;
+}
+
+body {
+    margin: 0;
+    background-color: #4b92e9;
+}
+
+.bg-primary{
+    background-color: #4b92e9 !important;
+    color: white !important;
+}
+
+.bg-accent{
+    background-color: #f6c420 !important;
+    color: rgb(60, 60, 60) !important;
+}
+
+.bg-success{
+    background-color: #2cc218 !important;
+    color: white !important;
+}
+
+.bg-danger{
+    background-color: crimson !important;
+    color: white !important;
+}
+
+.drop-shadow{
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.drop-shadow-thicc{
+    box-shadow: 0 2px 5px 0 black;
+}
+
+.moved{
+    position: absolute;
+    top: 10px;
+}
+
+.moved:last-of-type{
+    top: 15px;
+}
+
+.floaters-tooltip{
+    font-size: 16px;
+}
+
+.floaters-tooltip.offline{
+    background-color: white;
+    color: crimson;
+    font-weight: bold;
+}
+
+.floaters-tooltip.online{
+    background-color: white;
+    color: green;
+    font-weight: bold;
+}
+

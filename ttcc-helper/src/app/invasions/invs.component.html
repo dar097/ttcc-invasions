@@ -1,0 +1,78 @@
+<div class="left-floats">
+    <div fxLayout="column" class="mini-floater" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
+        <button (click)="notify()" [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Population: ' + (districts.length ? population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+            <mat-icon>people</mat-icon>
+        </button>
+        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Districts: ' + (districts.length ? districts.length : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+            <mat-icon>place</mat-icon>
+        </button>
+        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Invasions: ' + (districts.length ? invasions : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+            <mat-icon>android</mat-icon>
+        </button>
+    </div>
+    <button mat-fab class="floater" [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
+        <mat-icon>add</mat-icon>
+    </button>
+
+</div>
+
+<div fxLayout="column">
+    <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
+        fxLayout="row"
+        color="warn"
+        mode="indeterminate">
+    </mat-progress-bar>
+    <div *ngIf="lastRequestDown" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
+        <mat-card>
+            <mat-card-title style="color: crimson; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;SERVERS ARE DOWN&nbsp;<mat-icon class="icons">warning</mat-icon></mat-card-title>
+        </mat-card>
+    </div>
+    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="isFirstLoad">
+        <ng-container *ngFor="let index of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
+            <mat-card class="invasion-card drop-shadow">
+                <div class="mat-card-left">
+                    <h3 style="position: absolute;">
+                        Loading...
+                    </h3>
+                    <br/>
+                    <mat-divider></mat-divider>
+                    <div class="divider"></div>
+                    <mat-chip class="bg-primary drop-shadow moved">...</mat-chip>
+                    <div class="divider"></div>
+                    <mat-chip class="bg-accent drop-shadow moved">...</mat-chip>
+    
+                </div>
+                <div class="mat-card-right">
+                </div>
+            </mat-card>
+        </ng-container>
+    </div>
+    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="!lastRequestDown">
+        <ng-container *ngFor="let district of districts">
+            <mat-card class="invasion-card drop-shadow" *ngIf="district.online">
+                <div class="mat-card-left">
+                    <h3 style="position: absolute;">
+                        {{district.name}} 
+                    </h3>
+                    <mat-chip *ngIf="district.invasion_online" class="timer" [style.background-color]="district.remaining_time > 60 ? '#2cc218' : 'crimson'">
+                        {{district.remaining_time | secondsToDate | date:'mm:ss' }}
+                    </mat-chip>
+                    <br/>
+                    <mat-divider></mat-divider>
+                    <div class="divider"></div>
+                    <mat-chip class="bg-primary drop-shadow moved" *ngIf="district.invasion_online" [style.background]="getGradient(district.count_defeated/district.count_total)"  [matTooltip]="(district.count_total-district.count_defeated) + ' Remaining'" matTooltipPosition="right">{{width > 350 ? 'Status: ' : '' }} {{district.count_defeated}}/{{district.count_total}}</mat-chip>
+                    <mat-chip class="bg-primary drop-shadow moved" *ngIf="!district.invasion_online" matTooltipPosition="right">No {{width > 350 ? 'Current' : '' }} Invasion</mat-chip>                
+                    <div class="divider"></div>
+                    <mat-chip class="bg-accent drop-shadow moved">Population: {{district.population}}</mat-chip>
+    
+    
+                </div>
+                <div class="mat-card-right">
+                    <img *ngIf="width > 320" class="drop-shadow-thicc" mat-card-md-image [src]="getImage(district.cogs_attacking)" onError="this.src='../../assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
+                    <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="getImage(district.cogs_attacking)" onError="this.src='../../assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
+                    <div class="drop-shadow-thicc" *ngIf="district.invasion_online" mat-card-avatar [style.background-image]="getCogType(district.cogs_type)"></div>
+                </div>
+            </mat-card>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+.filler {
+    flex: 1 1 auto;
+}
+
+.mat-toolbar {
+    position: fixed; 
+    z-index: 100;
+    box-shadow: 0 2px 5px 0 black;
+    border-radius: 0;
+    background-color: #2068c0 !important;
+    height: 5vh;
+}
+
+.content {
+    padding: 1%;
+}
