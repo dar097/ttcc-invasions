@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ttcc-helper": {
+    "ttcc-invasions": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ttcc-helper:build"
+            "browserTarget": "ttcc-invasions:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ttcc-helper:build:production"
+              "browserTarget": "ttcc-invasions:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ttcc-helper:build"
+            "browserTarget": "ttcc-invasions:build"
           }
         },
         "test": {
@@ -98,7 +98,7 @@
         }
       }
     },
-    "ttcc-helper-e2e": {
+    "ttcc-invasions-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -106,11 +106,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ttcc-helper:serve"
+            "devServerTarget": "ttcc-invasions:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ttcc-helper:serve:production"
+              "devServerTarget": "ttcc-invasions:serve:production"
             }
           }
         },
@@ -126,5 +126,5 @@
       }
     }
   },
-  "defaultProject": "ttcc-helper"
+  "defaultProject": "ttcc-invasions"
 }
