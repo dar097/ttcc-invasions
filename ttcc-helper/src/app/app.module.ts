@@ -23,12 +23,7 @@ import { SecondsToDatePipe } from './invasions/timetoseconds.pipe';
     RouterModule.forRoot([
        {path: '', component: InvasionsComponent},
        {path: 'invasions', component: InvasionsComponent},
-      // {path: 'properties', component: PropertiesComponent},
-      // {path: 'properties/edit/:id', canActivate: [LoginGuardService], component: EditPropertyComponent},
-      // {path: 'properties/add', canActivate: [LoginGuardService], component: AddPropertyComponent},
-      // {path: 'properties/:id', component: PropertyComponent},
-      // {path: 'sign-up', component: SignUpComponent},
-      // {path: 'login', component: LoginComponent}
+       {path: '**', redirectTo: '/'},      
     ], {onSameUrlNavigation: 'reload'})
   ],
   providers: [ InvasionsService ],
