@@ -6,14 +6,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class InvasionsService {
-    private url: string = 'http://localhost:3000/latest';
+    private url: string = 'https://fathomless-inlet-84992.herokuapp.com';
     
     constructor(private http: HttpClient) {
 
     }
 
     getDistrictdata(): Observable<IDistrict[]> {
-        return this.http.get<IDistrict[]>(this.url).pipe(catchError(this.handleError));
+        return this.http.get<IDistrict[]>(this.url + '/latest').pipe(catchError(this.handleError));
     }
     
 

@@ -68,7 +68,7 @@
     
                 </div>
                 <div class="mat-card-right">
-                    <img *ngIf="width > 320" class="drop-shadow-thicc" mat-card-md-image [src]="getImage(district.cogs_attacking)" onError="this.src='../../assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
+                    <img *ngIf="width > 320" class="drop-shadow-thicc" mat-card-md-image [src]="getImage(district.cogs_attacking)" onError="this.src='../assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
                     <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="getImage(district.cogs_attacking)" onError="this.src='../../assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
                     <div class="drop-shadow-thicc" *ngIf="district.invasion_online" mat-card-avatar [style.background-image]="getCogType(district.cogs_type)"></div>
                 </div>
