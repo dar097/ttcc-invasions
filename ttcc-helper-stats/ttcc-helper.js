@@ -26,16 +26,6 @@ mongoose.connect('mongodb://ttcc-admin:aquilina123@ds239071.mlab.com:39071/ttcc-
     }
 });
 
-
-app.get('/test', function(req, res){
-    InvasionHistory.find().populate('started_ref', null, InvasionLog).exec(function(err, history){
-        if(err)
-            res.status(400).send(err);
-        else
-            res.status(200).send(history);
-    });
-});
-
 app.get('/latest', function(req, res){
     InvasionLog.findOne().select('created').sort({ created: -1}).exec(function(err, latestLog)
     {
