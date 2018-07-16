@@ -58,11 +58,11 @@ export class InvasionsComponent implements AfterViewInit {
 
   getImage(cogs_attacking){
     cogs_attacking = cogs_attacking === 'None' ? 'logo_icon' : cogs_attacking;
-    return '/assets/' + cogs_attacking + '.png';
+    return './assets/' + cogs_attacking + '.png';
   }
 
   getCogType(cogs_type){
-    return "url('/assets/" + cogs_type + ".png')";
+    return "url('./assets/" + cogs_type + ".png')";
   }
 
   getGradient(number){
@@ -71,7 +71,7 @@ export class InvasionsComponent implements AfterViewInit {
   }
 
   notify(district: IDistrict){
-    this.pushNotifications.create('Invasion Alert', {body: '\nAn Invasion has started in ' + district.name + '!\n', icon: '/assets/' + district.cogs_attacking + '.png'}).subscribe(
+    this.pushNotifications.create('Invasion Alert', {body: '\nAn Invasion has started in ' + district.name + '!\n', icon: './assets/' + district.cogs_attacking + '.png'}).subscribe(
       res => {
           if (res.event.type === 'click') {
               res.notification.close();
@@ -96,7 +96,7 @@ export class InvasionsComponent implements AfterViewInit {
         {
           if(this.lastRequestDown)
           {
-            this.pushNotifications.create('Server Status Alert', {body: '\nDistricts are back online.\nServers could possibly also be accessible.', icon: '/assets/logo_icon.png'}).subscribe(
+            this.pushNotifications.create('Server Status Alert', {body: '\nDistricts are back online.\nServers could possibly also be accessible.', icon: './assets/logo_icon.png'}).subscribe(
               res => {
                   if (res.event.type === 'click') {
                       res.notification.close();
