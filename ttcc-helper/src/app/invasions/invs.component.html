@@ -1,6 +1,6 @@
 <div class="left-floats">
     <div fxLayout="column" class="mini-floater" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
-        <button (click)="notify()" [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Population: ' + (districts.length ? population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Population: ' + (districts.length ? population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
             <mat-icon>people</mat-icon>
         </button>
         <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Districts: ' + (districts.length ? districts.length : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 

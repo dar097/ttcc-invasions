@@ -13,6 +13,7 @@ import { take, map } from '../../../node_modules/rxjs/operators';
   styleUrls: ['./invs.component.css']
 })
 export class InvasionsComponent implements AfterViewInit {
+  hover: boolean = false;
   width: number = 0;
   districts: IDistrict[] = [];
   title = 'Invasions';
