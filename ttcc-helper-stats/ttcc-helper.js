@@ -90,8 +90,8 @@ var requestLoop = setInterval(function(){
                         console.log(err);
                         else
                         {
-                            let createdMax = moment(newDistrict.created).add(30, 'minutes').toDate();
-                            let createdMin = moment(newDistrict.created).subtract(30, 'minutes').toDate();
+                            let createdMax = moment(newDistrict.created).add(45, 'minutes').toDate();
+                            let createdMin = moment(newDistrict.created).subtract(45, 'minutes').toDate();
                             if(newDistrict.cogs_attacking !== 'None')
                             {
                                 
