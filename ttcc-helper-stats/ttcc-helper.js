@@ -171,14 +171,6 @@ var requestLoop = setInterval(function(){
                                                     }
                                                 }
                                             });
-                                            var newEntry = new InvasionHistory({ started_ref: history._id, started: history.created });
-                                            newEntry.save(function(err){
-                                                if(err)
-                                                {
-                                                    console.log('InvasionHistory Error: Saving');
-                                                    console.log(err);
-                                                }
-                                            });
                                         }
                                         else
                                         {
