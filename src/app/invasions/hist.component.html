@@ -1,0 +1,56 @@
+<div fxLayout="column">
+    <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
+        fxLayout="row"
+        color="warn"
+        mode="indeterminate">
+    </mat-progress-bar>
+    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="isFirstLoad">
+        <ng-container *ngFor="let index of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
+            <mat-card class="history-card drop-shadow">
+                <div class="mat-card-left">
+                    <h3 style="position: absolute;">
+                        Loading...
+                    </h3>
+                    <br/>
+                    <mat-divider></mat-divider>
+                    <div class="divider"></div>
+                    <mat-chip class="bg-primary drop-shadow moved">...</mat-chip>
+                    <div class="divider"></div>
+                    <mat-chip class="bg-accent drop-shadow moved">...</mat-chip>
+    
+                </div>
+                <div class="mat-card-right">
+                </div>
+            </mat-card>
+        </ng-container>
+    </div>
+    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center">
+        <ng-container *ngFor="let history of histories">
+            <mat-card class="history-card drop-shadow">
+                <div class="mat-card-left">
+                    <h3 style="position: absolute; z-index: 2;">
+                        {{history.name}} 
+                    </h3>
+                    <br/>
+                    <mat-divider></mat-divider>
+                    <div class="divider"></div>
+                    <mat-chip *ngIf="history.ended" class="bg-primary drop-shadow moved" [style.background]="getGradient(history.count_defeated/history.count_total)"  [matTooltip]="(history.count_total-history.count_defeated) + ' Left over'" matTooltipPosition="right">{{width > 350 ? 'Result: ' : '' }} {{history.count_defeated}}/{{history.count_total}}</mat-chip>              
+                    <mat-chip *ngIf="!history.ended" class="bg-primary drop-shadow moved" [style.background]="getGradient(history.count_defeated/history.count_total)"  [matTooltip]="(history.count_total-history.count_defeated) + ' Left over'" matTooltipPosition="right">{{width > 350 ? 'Result: ' : '' }} ?//{{history.count_total}} </mat-chip>                                  
+                    <mat-chip class="bg-accent drop-shadow moved" style="margin-left: 2%;" matTooltip="Estimated Participants">
+                            ~{{history.population}} Toons
+                    </mat-chip>
+                    <div class="divider"></div>
+                    <mat-chip *ngIf="history.ended" class="bg-primary drop-shadow moved" >{{history.started | date:'d MMM, y' }}: {{history.started | date:'h:mm a' }} - {{history.ended | date:'h:mm a' }}</mat-chip>
+                    <mat-chip *ngIf="!history.ended" class="bg-primary drop-shadow moved" >Invasion Currently in Progress</mat-chip>
+    
+    
+                </div>
+                <div class="mat-card-right">
+                    <img *ngIf="width > 320" class="drop-shadow-thicc" mat-card-md-image [src]="getImage(history.cogs_attacking)" onError="this.src='./assets/logo_icon.png'" [matTooltip]="history.cogs_attacking"/>
+                    <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="getImage(history.cogs_attacking)" onError="this.src='./assets/logo_icon.png'" [matTooltip]="history.cogs_attacking"/>
+                    <div class="drop-shadow-thicc" mat-card-avatar [style.background-image]="getCogType(history.cogs_type)"></div>
+                </div>
+            </mat-card>
+        </ng-container>
+    </div>
+</div>

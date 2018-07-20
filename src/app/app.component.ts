@@ -7,6 +7,7 @@ import { Component, AfterViewInit } from '@angular/core';
 })
 export class AppComponent implements AfterViewInit {
   title = 'Home';
+  message: string = null;
 
   ngAfterViewInit(): void {
     const toolbar = document.getElementsByClassName('mat-toolbar') ? document.getElementsByClassName('mat-toolbar')[0] : null;

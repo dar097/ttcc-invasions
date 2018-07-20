@@ -3,9 +3,12 @@
   <mat-toolbar-row>
     <img src="./assets/logo_icon.png" height="58px"/>
     <span>TTCC</span>
+    <span *ngIf="message">&nbsp{{message}}</span>
     <span class="filler"></span>
-    <mat-chip-list>
-      <mat-chip  class="bg-accent drop-shadow">Invasions</mat-chip>
+    <mat-chip-list class="nav-chips">
+      <mat-chip [routerLink]="['/']" class="bg-accent drop-shadow">Invasions</mat-chip>
+      <mat-chip [routerLink]="['/history']" class="bg-accent drop-shadow">History</mat-chip>
+      <mat-chip [routerLink]="['/groups']" class="bg-accent drop-shadow">Group Finder</mat-chip>
       <!-- [routerLink]="['/invasions']" -->
     </mat-chip-list>
   </mat-toolbar-row>

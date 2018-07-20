@@ -2,8 +2,8 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { InvasionsService } from './invasions.service';
 import { IDistrict } from './idistrict';
-import { PushNotificationsService } from '../../../node_modules/ng-push';
-import { Router } from '../../../node_modules/@angular/router';
+import { PushNotificationsService } from 'ng-push';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invs',
@@ -81,7 +81,7 @@ export class InvasionsComponent implements AfterViewInit {
 
   refresh(){
     this.isLoading = true;
-    this.invasionsService.getDistrictdata().subscribe(
+    let distCheck = this.invasionsService.getDistrictdata().subscribe(
       res=>{
         // console.log(res);
         if(!res)
@@ -164,6 +164,8 @@ export class InvasionsComponent implements AfterViewInit {
           this.isLoading = false;
           if(this.isFirstLoad)
             this.isFirstLoad = false;
+
+          distCheck.unsubscribe();
         }
       },
       error => {

@@ -1,0 +1,67 @@
+.history-card {
+    min-width: 300px;
+    width: 350px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.mat-card-md-image{
+    border-radius: 100px; 
+    position: relative;
+    float: right;
+    background-color: white;
+    z-index: 2;
+}
+
+.mat-card-sm-image{
+    border-radius: 100px; 
+    position: relative;
+    background-color: white;
+    z-index: 2;
+}
+
+.mat-card-avatar{
+    background-size: cover;
+    position: absolute; 
+    bottom: 10px; 
+    right: 10px;
+    background-color: #c3c4c4;
+    z-index: 2;
+}
+
+.g-icon{
+    font-family: 'Material Icons';
+}
+
+.mat-card-left{
+    float: left; 
+    width: 70%;
+}
+
+.mat-card-left h3{
+    margin-top: -10px;
+    margin-bottom: 5px;
+}
+
+.mat-card-right{
+    float: right; 
+    width: 30%;
+}
+
+.icons{
+    position: relative;
+    top: 3px;
+}
+
+.timer{
+    position: absolute; 
+    border-radius: 0; 
+    top: 0;
+    right: 32%;
+    border-bottom-left-radius: 24px; 
+    border-bottom-right-radius: 24px; 
+    width: 25%;
+    color: white;
+    text-align: center;
+    z-index: 0;
+}

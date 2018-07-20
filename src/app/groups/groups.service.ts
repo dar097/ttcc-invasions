@@ -1,24 +1,19 @@
-import { IDistrict } from './idistrict';
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { filter, scan, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { IHistory } from './ihistory';
+import { IGroup } from './igroup';
 
 @Injectable()
-export class InvasionsService {
+export class GroupService {
     private url: string = 'https://fathomless-inlet-84992.herokuapp.com';
     
     constructor(private http: HttpClient) {
 
     }
 
-    getDistrictdata(): Observable<IDistrict[]> {
-        return this.http.get<IDistrict[]>(this.url + '/latest').pipe(catchError(this.handleError));
-    }
-
-    getHistorydata(): Observable<IHistory[]> {
-        return this.http.get<IHistory[]>(this.url + '/history').pipe(catchError(this.handleError));
+    getGroups(): Observable<IGroup[]> {
+        return this.http.get<IGroup[]>(this.url + '/groups').pipe(catchError(this.handleError));
     }
     
 
