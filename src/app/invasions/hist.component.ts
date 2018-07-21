@@ -53,7 +53,7 @@ export class HistoryComponent implements AfterViewInit {
 
   getImage(cogs_attacking){
     cogs_attacking = cogs_attacking === 'None' ? 'logo_icon' : cogs_attacking;
-    return './assets/' + cogs_attacking + '.png';
+    return './assets/cogs/' + cogs_attacking + '.png';
   }
 
   getCogType(cogs_type){

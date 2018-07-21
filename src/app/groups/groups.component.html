@@ -15,9 +15,8 @@
     </button>
 
 </div> -->
-
 <div fxLayout="column">
-    <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
+    <!-- <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
         fxLayout="row"
         color="warn"
         mode="indeterminate">
@@ -29,7 +28,7 @@
     </div>
     <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="isFirstLoad">
         <ng-container *ngFor="let index of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
-            <mat-card class="invasion-card drop-shadow">
+            <mat-card class="group-card drop-shadow">
                 <div class="mat-card-left">
                     <h3 style="position: absolute;">
                         Loading...
@@ -46,31 +45,40 @@
                 </div>
             </mat-card>
         </ng-container>
-    </div>
+    </div> -->
     <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="!lastRequestDown">
-        <ng-container *ngFor="let district of districts">
-            <mat-card class="invasion-card drop-shadow" *ngIf="district.online">
+        <ng-container *ngFor="let group of groups; let i = index;">
+            <mat-card class="group-card drop-shadow" (click)="viewGroup(i)">
                 <div class="mat-card-left">
                     <h3 style="position: absolute;">
-                        {{district.name}} 
+                        <span *ngIf="group.activity == 'Building'">{{group.building_level}} Story Building</span>
+                        <span *ngIf="group.activity == 'Facility'">{{group.facility_type.split('-')[0]}}</span>
+                        <span *ngIf="group.activity == 'Boss(HQ)'">{{group.boss}}</span>
+                        <span *ngIf="group.activity == 'Boss(Playground)'">Task Boss</span>
                     </h3>
-                    <mat-chip *ngIf="district.invasion_online" class="timer" [style.background-color]="district.remaining_time > 60 ? '#2cc218' : 'crimson'" matTooltip="Estimate time remaining">
-                        {{district.remaining_time | secondsToDate | date:'mm:ss' }}
+                    <mat-chip class="timer" [style.background-color]="group.toons.length + 1 < (group.activity == 'Boss(HQ)' ? 8 : 4) ? '#2cc218' : 'crimson'" matTooltip="Group Size" (click)="test('t2')">
+                        {{group.toons.length + 1}}/{{group.activity == 'Boss(HQ)' ? 8 : 4}}
                     </mat-chip>
                     <br/>
                     <mat-divider></mat-divider>
                     <div class="divider"></div>
-                    <mat-chip class="bg-primary drop-shadow moved" *ngIf="district.invasion_online" [style.background]="getGradient(district.count_defeated/district.count_total)"  [matTooltip]="(district.count_total-district.count_defeated) + ' Remaining'" matTooltipPosition="right">{{width > 350 ? 'Status: ' : '' }} {{district.count_defeated}}/{{district.count_total}}</mat-chip>
-                    <mat-chip class="bg-primary drop-shadow moved" *ngIf="!district.invasion_online" matTooltipPosition="right">No {{width > 350 ? 'Current' : '' }} Invasion</mat-chip>                
+                    <mat-chip *ngIf="group.activity == 'Building'" class="bg-primary drop-shadow moved" [matTooltip]="getPlayground(group.street)">{{group.street}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Facility'" class="bg-primary drop-shadow moved" [matTooltip]="">{{group.facility_type.split('-')[1]}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Boss(HQ)'" class="bg-primary drop-shadow moved" [matTooltip]="">{{getCogPlayground(group.boss)}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Boss(Playground)'" class="bg-primary drop-shadow moved" [matTooltip]="">{{getBossTaskLocation(group.playground)}}</mat-chip>
+
+                    <mat-chip class="bg-accent drop-shadow moved" matTooltipPosition="right">{{group.district}}</mat-chip>                
                     <div class="divider"></div>
-                    <mat-chip class="bg-accent drop-shadow moved">Population: {{district.population}}</mat-chip>
-    
-    
                 </div>
                 <div class="mat-card-right">
-                    <img *ngIf="width > 320" class="drop-shadow-thicc" mat-card-md-image [src]="getImage(district.cogs_attacking)" onError="this.src='./assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
-                    <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="getImage(district.cogs_attacking)" onError="this.src='./assets/logo_icon.png'" [matTooltip]="district.cogs_attacking"/>
-                    <div class="drop-shadow-thicc" *ngIf="district.invasion_online" mat-card-avatar [style.background-image]="getCogType(district.cogs_type)"></div>
+                    <img *ngIf="width > 320 && group.activity == 'Building'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/places/' + group.building_level + '-Building.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width > 320 && group.activity == 'Facility'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/places/' + group.facility_type.split('-')[0] + '.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width > 320 && group.activity == 'Boss(HQ)'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/cogs/' + group.boss.split('.').join('') + '.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width > 320 && group.activity == 'Boss(Playground)'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/places/' + group.playground + '-boss.png'" onError="this.src='./assets/logo_icon.png'"/>
+
+                    <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="group.activity" onError="this.src='./assets/logo_icon.png'"/>
+                    <div class="drop-shadow-thicc" *ngIf="group.activity == 'Building'" mat-card-avatar [style.background-image]="getCogType(group.cog_type)"></div>
+                    <div class="drop-shadow-thicc" *ngIf="group.activity == 'Facility' || group.activity == 'Boss(HQ)'" mat-card-avatar [style.background-image]="getCogType(getCogPlayground(group.facility_type || group.boss))"></div>
                 </div>
             </mat-card>
         </ng-container>

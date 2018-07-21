@@ -1,0 +1,87 @@
+.dialog-header{
+    background-size: 60% 100%;
+    background-position: 125% 0;
+}
+
+.dialog-header-left{
+    width: 70%; 
+    height: 100%; 
+    background-size: 100% 100%;
+    clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%); 
+    float: left;
+}
+
+.toon-icon{
+    display: inline-block;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 40px;
+    background-position: bottom;
+    margin-bottom: -5px;
+}
+
+.dialog-content-header{
+    width: 100%;
+    text-align: center;
+}
+
+.dialog-content-side{
+    width:45%;
+    text-align: center;
+}
+
+.dialog-content-side.side-left{
+    float: left;  
+    margin-left: 5%;
+    font-weight: bold;
+}
+
+.dialog-content-side.side-right{
+    float: right;  
+    margin-right: 5%;
+}
+
+.dialog-table{
+    text-align: center;
+    width: 100%;
+    border: 1px solid darkgrey;
+}
+
+.m-10{
+    margin: 10px;
+}
+
+
+.activity{
+    margin-top: 3%;
+    margin-left: 70%;
+    font-size: 20px;
+}
+
+.activity>span{
+    background-color: white;
+    border-radius: 50%;
+    border: 8px solid transparent;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+}
+
+.stories>.story{
+    float: left;
+    border-radius: 50%; 
+    height: 100%; 
+    width: 24px; 
+    background-color: rgb(75, 75, 75); 
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.8); 
+    margin-right: 4px;
+}
+
+.dialog-button{
+    width: 30%;
+    margin-left: 35%;
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.8);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: white;
+}

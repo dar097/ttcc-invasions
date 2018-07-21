@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule } from '@angular/material';
+import { MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, MatDialogModule } from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -16,14 +16,16 @@ import { SecondsToDatePipe } from './invasions/timetoseconds.pipe';
 import { FormsModule } from '@angular/forms';
 import { GroupComponent } from './groups/groups.component';
 import { GroupService } from './groups/groups.service';
+import { SocketService } from './socket.service';
+import { GroupDialog } from './groups/group.dialog';
 
 @NgModule({
   declarations: [
-    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe
+    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe, GroupDialog
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FlexLayoutModule, PushNotificationsModule, FormsModule,
-    MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, 
+    MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, MatDialogModule,
     RouterModule.forRoot([
        {path: '', component: InvasionsComponent},
        {path: 'invasions', component: InvasionsComponent},
@@ -32,7 +34,8 @@ import { GroupService } from './groups/groups.service';
        {path: '**', redirectTo: '/'},      
     ], {onSameUrlNavigation: 'reload'})
   ],
-  providers: [ InvasionsService, GroupService ],
-  bootstrap: [AppComponent]
+  providers: [ InvasionsService, GroupService, SocketService ],
+  bootstrap: [AppComponent],
+  entryComponents: [ GroupDialog ]
 })
 export class AppModule { }

@@ -1,14 +1,15 @@
 import { IToon } from "./itoon";
 
 export interface IGroup{
-    activity: String,
-    building_level?: Number, //building
-    cog_type?: String, //building
-    street?: String, //building
-    facility_type?: String, //facility
-    boss?: String, //boss.hq
-    playground?: String, //boss.task
-    district: String,
+    _id: string,
+    activity: string,
+    building_level?: number, //building
+    cog_type?: string, //building
+    street?: string, //building
+    facility_type?: string, //facility
+    boss?: string, //boss.hq
+    playground?: string, //boss.task
+    district: string,
     host: IToon,
     toons: IToon[],
     created: Date
@@ -19,7 +20,7 @@ var mongoose = require('mongoose');
 
 var GroupSchema = new mongoose.Schema({
     activity: {
-        type: String,
+        type: string,
         enum: [
             'Building', 
             'Facility', 
@@ -30,7 +31,7 @@ var GroupSchema = new mongoose.Schema({
     },
     },
     cog_type: {//Building
-        type: String,
+        type: string,
         enum: [
         ],
         required: function() {

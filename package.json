@@ -25,10 +25,13 @@
     "@angular/pwa": "^0.6.8",
     "@angular/router": "^6.0.9",
     "@angular/service-worker": "^6.0.3",
+    "@types/socket.io-client": "^1.4.32",
     "core-js": "^2.5.4",
+    "express": "^4.16.3",
     "hammerjs": "^2.0.8",
     "ng-push": "^0.2.2",
     "rxjs": "^6.2.2",
+    "socket.io": "^2.1.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

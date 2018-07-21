@@ -21,7 +21,7 @@ export class InvasionsComponent implements AfterViewInit {
   districtInvasions = {};
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
-  
+
   constructor(public invasionsService: InvasionsService, private pushNotifications: PushNotificationsService, public router: Router){
     pushNotifications.requestPermission();
     let instance = this;
@@ -33,8 +33,30 @@ export class InvasionsComponent implements AfterViewInit {
     setInterval(function(){
       instance.refresh();
     }, 25000);
+
+    //this.initConnection();
   }
 
+  /*initConnection(){
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService.onDistrict().subscribe(
+      district => {
+        console.log(district);
+      }
+    );
+
+    this.socketService.onEvent(Event.CONNECT).subscribe(
+      () => {
+        console.log('connected');
+      }
+    );
+      
+    this.socketService.onEvent(Event.DISCONNECT).subscribe(
+      () => {
+        console.log('disconnected');
+      }
+    );
+  }*/
   
   onResize(){
     this.width = window.innerWidth;
@@ -58,7 +80,7 @@ export class InvasionsComponent implements AfterViewInit {
 
   getImage(cogs_attacking){
     cogs_attacking = cogs_attacking === 'None' ? 'logo_icon' : cogs_attacking;
-    return './assets/' + cogs_attacking + '.png';
+    return './assets/cogs/' + cogs_attacking + '.png';
   }
 
   getCogType(cogs_type){

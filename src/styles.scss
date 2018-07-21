@@ -15,6 +15,7 @@
 body {
     margin: 0;
     background-color: #4b92e9;
+    background-image: url(./assets/background.png);
 }
 
 .bg-primary{
@@ -72,4 +73,8 @@ body {
 
 .nav-chips mat-chip:hover{
     cursor: pointer;
+}
+
+.group-dialog .mat-dialog-container{
+    padding: 0;
 }

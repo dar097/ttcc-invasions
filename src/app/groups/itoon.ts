@@ -1,6 +1,7 @@
 export interface IToon{
-    name: String,
-    laff: Number,
-    species?: String,
-    color?: String
+    _id: string,
+    name: string,
+    laff: number,
+    species?: string,
+    color?: string
 }
