@@ -18,10 +18,11 @@ import { GroupComponent } from './groups/groups.component';
 import { GroupService } from './groups/groups.service';
 import { SocketService } from './socket.service';
 import { GroupDialog } from './groups/group.dialog';
+import { ToonDialog } from './groups/toon.dialog';
 
 @NgModule({
   declarations: [
-    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe, GroupDialog
+    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe, GroupDialog, ToonDialog
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FlexLayoutModule, PushNotificationsModule, FormsModule,
@@ -36,6 +37,6 @@ import { GroupDialog } from './groups/group.dialog';
   ],
   providers: [ InvasionsService, GroupService, SocketService ],
   bootstrap: [AppComponent],
-  entryComponents: [ GroupDialog ]
+  entryComponents: [ GroupDialog, ToonDialog ]
 })
 export class AppModule { }

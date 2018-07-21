@@ -56,18 +56,18 @@
                         <span *ngIf="group.activity == 'Boss(HQ)'">{{group.boss}}</span>
                         <span *ngIf="group.activity == 'Boss(Playground)'">Task Boss</span>
                     </h3>
-                    <mat-chip class="timer" [style.background-color]="group.toons.length + 1 < (group.activity == 'Boss(HQ)' ? 8 : 4) ? '#2cc218' : 'crimson'" matTooltip="Group Size" (click)="test('t2')">
+                    <mat-chip class="timer" [style.background-color]="group.toons.length + 1 < (group.activity == 'Boss(HQ)' ? 8 : 4) ? '#2cc218' : 'crimson'" matTooltip="Group Size" (click)="viewGroup(i)">
                         {{group.toons.length + 1}}/{{group.activity == 'Boss(HQ)' ? 8 : 4}}
                     </mat-chip>
                     <br/>
                     <mat-divider></mat-divider>
                     <div class="divider"></div>
-                    <mat-chip *ngIf="group.activity == 'Building'" class="bg-primary drop-shadow moved" [matTooltip]="getPlayground(group.street)">{{group.street}}</mat-chip>
-                    <mat-chip *ngIf="group.activity == 'Facility'" class="bg-primary drop-shadow moved" [matTooltip]="">{{group.facility_type.split('-')[1]}}</mat-chip>
-                    <mat-chip *ngIf="group.activity == 'Boss(HQ)'" class="bg-primary drop-shadow moved" [matTooltip]="">{{getCogPlayground(group.boss)}}</mat-chip>
-                    <mat-chip *ngIf="group.activity == 'Boss(Playground)'" class="bg-primary drop-shadow moved" [matTooltip]="">{{getBossTaskLocation(group.playground)}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Building'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="getPlayground(group.street)">{{group.street}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Facility'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{group.facility_type.split('-')[1]}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Boss(HQ)'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{getCogPlayground(group.boss)}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Boss(Playground)'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{getBossTaskLocation(group.playground)}}</mat-chip>
 
-                    <mat-chip class="bg-accent drop-shadow moved" matTooltipPosition="right">{{group.district}}</mat-chip>                
+                    <mat-chip class="bg-accent drop-shadow moved" matTooltipPosition="right" (click)="viewGroup(i)">{{group.district}}</mat-chip>                
                     <div class="divider"></div>
                 </div>
                 <div class="mat-card-right">

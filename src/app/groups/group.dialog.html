@@ -117,7 +117,7 @@
         </table>
     </div>
     <div class="dialog-actions">
-        <button mat-button class="dialog-button" id="group-btn" (click)="group()"  [style.background-color]="inThisGroup ? '#c52b2b' : '#31b631'">{{inThisGroup ? 'Leave' : 'Join'}}</button>
+        <button mat-button class="dialog-button" id="group-btn" (click)="group()"  [style.background-color]="(inThisGroup ? '#c52b2b' : (isFull ? 'grey' : '#31b631'))" [disabled]="isFull && !inThisGroup">{{inThisGroup ? 'Leave' : 'Join'}}</button>
     </div>
 
     <!-- <div class="dialog-content-side side-left">

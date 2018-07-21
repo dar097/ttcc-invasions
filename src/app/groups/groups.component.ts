@@ -7,8 +7,9 @@ import { IGroup } from './igroup';
 import { SocketService } from '../socket.service';
 import { Event } from '../client-enums';
 import { Subscription } from '../../../node_modules/rxjs';
-import { MatDialog } from '../../../node_modules/@angular/material';
+import { MatDialog, MatDialogRef } from '../../../node_modules/@angular/material';
 import { GroupDialog } from './group.dialog';
+import { ToonDialog } from './toon.dialog';
 
 @Component({
   selector: 'app-group',
@@ -160,6 +161,9 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
   ioConnection: Subscription;
+  groupDialog: MatDialogRef<any, any>;
+  toonDialog: MatDialogRef<any, any>;
+
   
   constructor(public groupService: GroupService, private pushNotifications: PushNotificationsService, public router: Router, public socketService: SocketService, public dialog: MatDialog){
     pushNotifications.requestPermission();
@@ -169,7 +173,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
     }
 
     instance.onResize();
-    //this.refresh();
+    this.refresh();
+
   }
 
   initConnection(){
@@ -216,12 +221,32 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
     );
   }
   
+  createToon(){
+    this.toonDialog = this.dialog.open(ToonDialog, {
+      panelClass: 'toon-dialog',
+      autoFocus: false
+    });
+  }
+
   viewGroup(index: number){
-    this.dialog.open(GroupDialog, {
+    if(!localStorage.getItem('toon'))
+    {
+      this.createToon();
+      return;
+    }
+    this.groupDialog = this.dialog.open(GroupDialog, {
       data: this.groups[index],
       panelClass: 'group-dialog',
       autoFocus: false
-    })
+    });
+    this.groupDialog.afterClosed().subscribe(
+      (result: string) => {
+        if(result && result == 'notoon')
+        {
+          this.createToon();
+        }
+      }
+    )
   }
 
   onResize(){

@@ -1,6 +1,10 @@
 import {Component, Inject, Host} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { IGroup } from './igroup';
+import { Subscription } from '../../../node_modules/rxjs';
+import { SocketService } from '../socket.service';
+import { Event } from '../client-enums';
+import { GroupService } from './groups.service';
 
 @Component({
     selector: 'group-dialog',
@@ -10,11 +14,50 @@ import { IGroup } from './igroup';
   export class GroupDialog {
       sortedToons: any[] = [];
       inThisGroup: boolean = false;
-    constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: IGroup) {
+      isFull: boolean = false;
+      ioConnection: Subscription;
+    constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: IGroup, public socketService: SocketService, public groupService: GroupService) {
         this.sortToons();
         window.onresize = this.onResize;
         setTimeout(this.onResize,100);
+        this.initConnection();
+        let localToon = localStorage.getItem('Toon');
+        if(!localToon)
+            this.dialogRef.close('notoon');
     }
+
+    initConnection(){
+        //this.socketService.initSocket();
+        this.ioConnection = this.socketService.onGroup().subscribe(
+          group => {
+            if(group._id == this.data._id)
+            {
+                this.data = group;
+                this.sortToons();
+            }
+          }
+        );
+    
+        this.socketService.onNoMoreGroup().subscribe(
+          group_id => {
+            if(group_id == this.data._id)
+                this.dialogRef.close('notoon');
+          }
+        );
+    
+        this.socketService.onEvent(Event.CONNECT).subscribe(
+          () => {
+            console.log('Dialog: Connected');
+          }
+        );
+          
+        this.socketService.onEvent(Event.DISCONNECT).subscribe(
+          () => {
+            console.log('Dialog: Disconnected');
+          }
+        );
+      }
+
 
     onResize(){
         var height = window.innerHeight - 50;
@@ -58,17 +101,34 @@ import { IGroup } from './igroup';
         let toon = localStorage.getItem('toon');
         if(toon)
         {
-            //join or leave depending on isInGroup   
+            if(this.inThisGroup)
+                this.groupService.leaveGroup(this.data._id);
+            else
+                this.groupService.joinGroup(this.data._id);
         }
         else
         {
-            //create a toon
+            this.dialogRef.close('notoon');
         }
     }
 
     sortToons(){
+        var tooncount = 1 + this.data.toons.length;
+        this.isFull = tooncount >= (this.data.activity == 'Boss(HQ)' ? 8 : 4);
         this.sortedToons = [{ toon: this.data.host, count: 1}];
-        //CHECK IF USER IS IN GROUP
+        let localToon = localStorage.getItem('toon');
+        if(localToon && (this.data.host._id == localToon || this.data.toons.filter(t => t._id == localToon).length > 1))
+        {
+            this.inThisGroup = true;
+        }
+        else
+        {
+            this.inThisGroup = false;
+            if(!localToon)
+            {
+                this.dialogRef.close('notoon');
+            }
+        }
         for(var toon in this.data.toons)
         {
             var currentToon = this.data.toons[toon];
