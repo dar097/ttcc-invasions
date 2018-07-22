@@ -90,7 +90,7 @@ import { IToon } from './itoon';
         }
         else
         {
-            if(!localStorage.getItem('toon'))
+            if(localStorage.getItem('toon'))
                 this.closeDia();
         }
     }

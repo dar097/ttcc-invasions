@@ -82,17 +82,17 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
       }
     );
 
-    this.socketService.onEvent(Event.CONNECT).subscribe(
-      () => {
-        console.log('connected');
-      }
-    );
+    // this.socketService.onEvent(Event.CONNECT).subscribe(
+    //   () => {
+    //     //console.log('connected');
+    //   }
+    // );
       
-    this.socketService.onEvent(Event.DISCONNECT).subscribe(
-      () => {
-        console.log('disconnected');
-      }
-    );
+    // this.socketService.onEvent(Event.DISCONNECT).subscribe(
+    //   () => {
+    //     //console.log('disconnected');
+    //   }
+    // );
   }
   
   createGroup(){
@@ -103,6 +103,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   }
 
   popToon(data){
+    console.log(data);
     if(data != 'Create' && data != 'Edit')
       return;
 

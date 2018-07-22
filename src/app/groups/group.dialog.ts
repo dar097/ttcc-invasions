@@ -45,17 +45,17 @@ import { GroupService } from './groups.service';
           }
         );
     
-        this.socketService.onEvent(Event.CONNECT).subscribe(
-          () => {
-            console.log('Dialog: Connected');
-          }
-        );
+        // this.socketService.onEvent(Event.CONNECT).subscribe(
+        //   () => {
+        //     //console.log('Dialog: Connected');
+        //   }
+        // );
           
-        this.socketService.onEvent(Event.DISCONNECT).subscribe(
-          () => {
-            console.log('Dialog: Disconnected');
-          }
-        );
+        // this.socketService.onEvent(Event.DISCONNECT).subscribe(
+        //   () => {
+        //     //console.log('Dialog: Disconnected');
+        //   }
+        // );
       }
 
 
