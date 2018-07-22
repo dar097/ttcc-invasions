@@ -30,7 +30,7 @@
             <mat-card-title style="color: #f6c420; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;No Groups Active&nbsp;<mat-icon class="icons">warning</mat-icon><br/>Hover over the button at the bottom left to create one.</mat-card-title>
         </mat-card>
     </div>
-    <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="!lastRequestDown">
+    <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center">
         <ng-container *ngFor="let group of groups; let i = index;">
             <mat-card class="group-card drop-shadow" (click)="viewGroup(i)">
                 <div class="mat-card-left">
