@@ -6,7 +6,7 @@ import { IDistrict } from './invasions/idistrict';
 import * as socketIo from 'socket.io-client';
 import { IGroup } from './groups/igroup';
 
-const SERVER_URL = 'http://localhost:5000';
+const SERVER_URL = 'https://fathomless-inlet-84992.herokuapp.com';
 
 @Injectable()
 export class SocketService {
