@@ -29,7 +29,10 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
 
 
     this.refresh();
-    this.refreshLoop = setInterval(this.refresh, 25000);
+    let instance = this;
+    this.refreshLoop = setInterval(function(){
+      instance.refresh();
+    }, 25000);
 
     //this.initConnection();
   }
@@ -105,8 +108,6 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
 
   refresh(){
     this.isLoading = true;
-    if(!this.invasionsService)
-      return;
     let distCheck = this.invasionsService.getDistrictdata().subscribe(
       res=>{
         // console.log(res);
