@@ -105,6 +105,8 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
 
   refresh(){
     this.isLoading = true;
+    if(!this.invasionsService)
+      return;
     let distCheck = this.invasionsService.getDistrictdata().subscribe(
       res=>{
         // console.log(res);
