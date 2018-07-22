@@ -14,8 +14,9 @@
 
 body {
     margin: 0;
-    background-color: #4b92e9;
+    background-color: #002ba8;
     background-image: url(./assets/background.png);
+    background-repeat: no-repeat;
 }
 
 .bg-primary{
@@ -77,4 +78,16 @@ body {
 
 .group-dialog .mat-dialog-container{
     padding: 0;
+}
+
+.toon-dialog .mat-dialog-container{
+    padding: 0;
+}
+
+.create-dialog .mat-dialog-container{
+    padding: 0;
+}
+
+.m-0{
+    margin: 0;
 }

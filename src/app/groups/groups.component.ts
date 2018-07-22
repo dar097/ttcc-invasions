@@ -10,6 +10,7 @@ import { Subscription } from '../../../node_modules/rxjs';
 import { MatDialog, MatDialogRef } from '../../../node_modules/@angular/material';
 import { GroupDialog } from './group.dialog';
 import { ToonDialog } from './toon.dialog';
+import { CreateDialog } from './create.dialog';
 
 @Component({
   selector: 'app-group',
@@ -19,151 +20,16 @@ import { ToonDialog } from './toon.dialog';
 export class GroupComponent implements AfterViewInit, OnDestroy {
   hover: boolean = false;
   width: number = 0;
-  groups: IGroup[] = [
-    {
-      _id: 'test',
-      activity: 'Building',
-      cog_type: 'Bossbot',
-      building_level: 4,
-      street: 'Punchline Place',
-      district: 'Whistle Woods',
-      host: {
-        _id: 'toon1',
-        name: 'Burnt',
-        laff: 50,
-        species: 'Cat'
-      },
-      toons: [
-        {
-          _id: 'toon0',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon2',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon3',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon4',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon5',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon6',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        },
-        {
-          _id: 'toon7',
-          name: 'Burnt',
-          laff: 50,
-          species: 'Cat'
-        }
-      ],
-      created: new Date()
-    },
-    {
-      _id: 'test5',
-      activity: 'Facility',
-      facility_type: 'Mint-Dollar',
-      district: 'Whistle Woods',
-      host: {
-        _id: 'toon1',
-        name: 'Burnt',
-        laff: 50,
-        species: 'Cat'
-      },
-      toons: [],
-      created: new Date()
-    },
-    {
-      _id: 'test2',
-      activity: 'Facility',
-      facility_type: 'Factory-Short',
-      district: 'Whistle Woods',
-      host: {
-        _id: 'toon2',
-        name: 'Dynamite',
-        laff: 52,
-        species: 'Horse'
-      },
-      toons: [
-        {
-          _id: 'toon3',
-          name: 'Hoix',
-          laff: 25,
-          species: 'Bear'
-        }
-      ],
-      created: new Date()
-    },
-    {
-      _id: 'test3',
-      activity: 'Boss(HQ)',
-      boss: 'V.P',
-      district: 'Whistle Woods',
-      host: {
-        _id: 'toon4',
-        name: 'Dynabite',
-        laff: 52,
-        species: 'Bat'
-      },
-      toons: [
-        {
-          _id: 'toon5',
-          name: 'Hoixo',
-          laff: 25,
-          species: 'Bear'
-        }
-      ],
-      created: new Date()
-    },
-    {
-      _id: 'test4',
-      activity: 'Boss(Playground)',
-      playground: 'Toontown Central',
-      district: 'Whistle Woods',
-      host: {
-        _id: 'toon4',
-        name: 'Dynamite',
-        laff: 52,
-        species: 'Horse'
-      },
-      toons: [
-        {
-          _id: 'toon5',
-          name: 'Hoix',
-          laff: 25,
-          species: 'Bear'
-        }
-      ],
-      created: new Date()
-    }
-  ];
+  groups: IGroup[] = [];
   title = 'Group Finder';
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
   ioConnection: Subscription;
   groupDialog: MatDialogRef<any, any>;
   toonDialog: MatDialogRef<any, any>;
-
+  createDialog: MatDialogRef<any, any>;
+  hasToon: boolean = false;
+  toonInGroup: boolean = false;
   
   constructor(public groupService: GroupService, private pushNotifications: PushNotificationsService, public router: Router, public socketService: SocketService, public dialog: MatDialog){
     pushNotifications.requestPermission();
@@ -174,6 +40,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
     instance.onResize();
     this.refresh();
+
+    this.hasToon = localStorage.getItem('toon') != null;
 
   }
 
@@ -208,6 +76,12 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
       }
     );
 
+    this.socketService.onGroupPurge().subscribe(
+      () => {
+        this.refresh();
+      }
+    );
+
     this.socketService.onEvent(Event.CONNECT).subscribe(
       () => {
         console.log('connected');
@@ -221,32 +95,58 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
     );
   }
   
-  createToon(){
-    this.toonDialog = this.dialog.open(ToonDialog, {
-      panelClass: 'toon-dialog',
+  createGroup(){
+    this.createDialog = this.dialog.open(CreateDialog, {
+      panelClass: 'create-dialog',
       autoFocus: false
     });
   }
 
-  viewGroup(index: number){
-    if(!localStorage.getItem('toon'))
-    {
-      this.createToon();
+  popToon(data){
+    if(data != 'Create' && data != 'Edit')
       return;
-    }
-    this.groupDialog = this.dialog.open(GroupDialog, {
-      data: this.groups[index],
-      panelClass: 'group-dialog',
+
+    this.toonDialog = this.dialog.open(ToonDialog, {
+      panelClass: 'toon-dialog',
+      data: data,
       autoFocus: false
     });
-    this.groupDialog.afterClosed().subscribe(
-      (result: string) => {
-        if(result && result == 'notoon')
-        {
-          this.createToon();
-        }
+
+    this.toonDialog.afterClosed().subscribe(
+      () => {
+        this.hasToon = localStorage.getItem('toon') != null;
       }
-    )
+    );
+  }
+
+  viewGroup(index: number){
+    if(localStorage.getItem('toon'))
+    {
+      this.groupDialog = this.dialog.open(GroupDialog, {
+        data: this.groups[index],
+        panelClass: 'group-dialog',
+        autoFocus: false
+      });
+      this.groupDialog.afterClosed().subscribe(
+        (result: string) => {
+          if(result)
+          {
+            if(result == 'notoon')
+            {
+              this.popToon('Create');
+            }
+            if(result == 'left')
+            {
+              this.toonInGroup = false;
+            }
+          }
+        }
+      );
+    }
+    else
+    {
+      this.popToon('Create');
+    }
   }
 
   onResize(){
@@ -286,6 +186,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
     return 'Bossbot HQ';
   }
+
   getPlayground(street: string){
     var playground = '';
     switch(street)
@@ -353,6 +254,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
   reorderGroups(){
     var groups = this.groups.sort(function(a,b) {
+      console.log(a);
+      console.log(b);
       if (a.created > b.created)
         return -1;
       if (a.created < b.created)
@@ -360,6 +263,16 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
       return 0;
     });
     
+    this.toonInGroup = false;
+    var localToon = localStorage.getItem('toon');
+    if(groups.length > 0 && localToon)
+    {
+      if(groups.find(group => group.host._id == localToon) || groups.find(group => group.toons.find(toon => toon._id == localToon) != null))
+      {
+        this.toonInGroup = true;
+      }
+    }
+
     this.groups = groups;
   }
 
@@ -381,7 +294,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
         this.initConnection(); 
       },
       error => {
-        console.log('error retrieving group data');
+        console.log('Error retrieving group data');
         console.log(error);
       }
     );

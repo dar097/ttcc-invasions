@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, MatDialogModule } from '@angular/material';
+import { MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSliderModule, GestureConfig, MatSnackBar, MatSnackBarModule } from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -13,20 +13,23 @@ import { InvasionsComponent } from './invasions/invs.component';
 import { InvasionsService } from './invasions/invasions.service';
 import { PushNotificationsModule } from 'ng-push';
 import { SecondsToDatePipe } from './invasions/timetoseconds.pipe';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GroupComponent } from './groups/groups.component';
 import { GroupService } from './groups/groups.service';
 import { SocketService } from './socket.service';
 import { GroupDialog } from './groups/group.dialog';
 import { ToonDialog } from './groups/toon.dialog';
+import 'hammerjs';
+import { CreateDialog } from './groups/create.dialog';
 
 @NgModule({
   declarations: [
-    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe, GroupDialog, ToonDialog
+    AppComponent, InvasionsComponent, HistoryComponent, GroupComponent, SecondsToDatePipe, GroupDialog, ToonDialog, CreateDialog
   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, HttpClientModule, FlexLayoutModule, PushNotificationsModule, FormsModule,
-    MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, MatDialogModule,
+    BrowserModule, BrowserAnimationsModule, HttpClientModule, FlexLayoutModule, PushNotificationsModule, FormsModule, ReactiveFormsModule,
+    MatToolbarModule, MatChipsModule, MatCardModule, MatIconModule, MatTooltipModule, MatDividerModule, MatButtonModule, MatProgressBarModule, 
+    MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSliderModule, MatSnackBarModule,
     RouterModule.forRoot([
        {path: '', component: InvasionsComponent},
        {path: 'invasions', component: InvasionsComponent},
@@ -35,8 +38,8 @@ import { ToonDialog } from './groups/toon.dialog';
        {path: '**', redirectTo: '/'},      
     ], {onSameUrlNavigation: 'reload'})
   ],
-  providers: [ InvasionsService, GroupService, SocketService ],
+  providers: [ { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }, InvasionsService, GroupService, SocketService ],
   bootstrap: [AppComponent],
-  entryComponents: [ GroupDialog, ToonDialog ]
+  entryComponents: [ GroupDialog, ToonDialog, CreateDialog ]
 })
 export class AppModule { }

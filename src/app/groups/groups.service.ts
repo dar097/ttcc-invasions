@@ -18,16 +18,44 @@ export class GroupService {
         return this.http.post<string>(this.url + '/toon/create', toon).pipe(catchError(this.handleError));
     }
 
+    editToon(toon: IToon): Observable<string> {
+        toon._id = localStorage.getItem('toon');
+        return this.http.post<string>(this.url + '/toon/edit', toon).pipe(catchError(this.handleError));
+    }
+
+    getToon(): Observable<IToon>{
+        return this.http.get<IToon>(this.url + '/toon', { params: { toon: localStorage.getItem('toon') } }).pipe(catchError(this.handleError));
+    }
+
     getGroups(): Observable<IGroup[]> {
         return this.http.get<IGroup[]>(this.url + '/groups').pipe(catchError(this.handleError));
     }
 
-    joinGroup(group: string): Observable<string> {
-        return this.http.post<string>(this.url + '/group/join',{ toon: '', group: group }).pipe(catchError(this.handleError));
+    createGroup(group: IGroup): Observable<any> {
+        var groupObj = Object(group);
+        for(var item in groupObj)
+        {
+            if(groupObj[item] == null)
+            {
+                console.log(item)
+                delete groupObj[item];
+            }
+        }
+        if(groupObj.size == 1)
+            delete groupObj.size;
+        else
+            groupObj.size--;
+
+        groupObj.host = localStorage.getItem('toon')
+        return this.http.post<any>(this.url + '/group/create', groupObj).pipe(catchError(this.handleError));
     }
 
-    leaveGroup(group: string): Observable<string> {
-        return this.http.post<string>(this.url + '/group/leave',{ toon: '', group: group }).pipe(catchError(this.handleError));
+    joinGroup(group: string): Observable<any> {
+        return this.http.post<any>(this.url + '/group/join',{ toon: localStorage.getItem('toon'), group: group }).pipe(catchError(this.handleError));
+    }
+
+    leaveGroup(group: string): Observable<any> {
+        return this.http.post<any>(this.url + '/group/leave',{ toon: localStorage.getItem('toon'), group: group }).pipe(catchError(this.handleError));
     }
     
 

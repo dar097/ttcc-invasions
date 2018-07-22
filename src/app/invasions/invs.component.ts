@@ -1,5 +1,5 @@
 
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { InvasionsService } from './invasions.service';
 import { IDistrict } from './idistrict';
 import { PushNotificationsService } from 'ng-push';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './invs.component.html',
   styleUrls: ['./invs.component.css']
 })
-export class InvasionsComponent implements AfterViewInit {
+export class InvasionsComponent implements AfterViewInit, OnDestroy {
   hover: boolean = false;
   width: number = 0;
   districts: IDistrict[] = [];
@@ -21,20 +21,22 @@ export class InvasionsComponent implements AfterViewInit {
   districtInvasions = {};
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
+  refreshLoop: any;
 
   constructor(public invasionsService: InvasionsService, private pushNotifications: PushNotificationsService, public router: Router){
     pushNotifications.requestPermission();
-    let instance = this;
-    window.onresize = function(){
-      instance.onResize(); 
-    }
+    window.addEventListener('resize', this.onResize);
+
 
     this.refresh();
-    setInterval(function(){
-      instance.refresh();
-    }, 25000);
+    this.refreshLoop = setInterval(this.refresh, 25000);
 
     //this.initConnection();
+  }
+
+  ngOnDestroy(): void {
+    if(this.refreshLoop)
+      clearInterval(this.refreshLoop);
   }
 
   /*initConnection(){
@@ -93,7 +95,7 @@ export class InvasionsComponent implements AfterViewInit {
   }
 
   notify(district: IDistrict){
-    this.pushNotifications.create('Invasion Alert', {body: '\nAn Invasion has started in ' + district.name + '!\n', icon: './assets/' + district.cogs_attacking + '.png'}).subscribe(
+    this.pushNotifications.create('Invasion Alert', {tag: 'hello', body: '\nAn Invasion has started in ' + district.name + '!\n(' + district.cogs_attacking + ')', icon: './assets/cogs/' + district.cogs_attacking + '.png'}).subscribe(
       res => {
           if (res.event.type === 'click') {
               res.notification.close();

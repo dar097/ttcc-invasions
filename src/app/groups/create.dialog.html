@@ -1,0 +1,125 @@
+<div class="dialog-content" id="dialog-group">
+        <div class="dialog-header">
+            <h1>Create a Group</h1>
+        </div>
+        <mat-divider></mat-divider>
+        <br/>
+        <div style="padding: 0 5%; width: 90%">
+            <form [formGroup]="groupForm" class="create-group-form">
+                <mat-form-field>
+                    <mat-select placeholder="Activity" required formControlName="activity">
+                        <mat-option *ngFor="let activity of activities" [value]="activity.value">
+                            {{activity.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['activity'].errors?.required">
+                        Activity is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field *ngIf="groupForm.controls.activity.value != ''">
+                    <mat-select *ngIf="groupForm.controls.activity.value != 'Boss(HQ)'" placeholder="Group Size" required formControlName="size">
+                        <mat-option *ngFor="let size of [1,2,3,4]" [value]="size">
+                            {{size}} {{size == 1 ? 'Toon': 'Toons'}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-select *ngIf="groupForm.controls.activity.value == 'Boss(HQ)'" placeholder="Group Size" required formControlName="size">
+                        <mat-option *ngFor="let size of [1,2,3,4,5,6,7,8]" [value]="size">
+                            {{size}} Toons
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['activity'].errors?.required">
+                        Activity is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                <div fxShow fxHide.lt-sm *ngIf="groupForm.controls.activity.value == 'Building'">
+                    <br/>
+                </div>
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Building'">
+                    <mat-select placeholder="Stories" required formControlName="building_level">
+                        <mat-option *ngFor="let floor of [1,2,3,4,5,6]" [value]="floor">
+                            {{floor}} {{floor == 1 ? 'Story': 'Stories'}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['building_level'].errors?.required">
+                        Building Level is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Building'">
+                    <mat-select placeholder="Type" required formControlName="cog_type">
+                        <mat-option *ngFor="let type of cog_types" [value]="type.name" [style.background-color]="type.color">
+                            {{type.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['cog_type'].errors?.required">
+                        Building Type is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                <div fxShow fxHide.lt-sm>
+                    <br/>
+                </div>
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Facility'">
+                    <mat-select placeholder="Facility" required formControlName="facility_type">
+                        <mat-optgroup *ngFor="let facility of facilities" [label]="facility.name" [style.background-color]="facility.color">
+                            <mat-option *ngFor="let fac_type of facility.types" [value]="facility.name + '-' + fac_type" [style.background-color]="facility.color">
+                                {{fac_type}} {{facility.name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['facility_type'].errors?.required">
+                        Facility is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Boss(HQ)'">
+                    <mat-select placeholder="Boss" required formControlName="boss">
+                        <mat-option *ngFor="let boss of bosses" [value]="boss.name" [style.background-color]="boss.color">
+                            {{boss.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['boss'].errors?.required">
+                        Boss is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Boss(Playground)'">
+                    <mat-select placeholder="Task" required formControlName="playground">
+                        <mat-option *ngFor="let task of tasks" [value]="task.name" [style.background-color]="task.color">
+                            {{task.name}} boss
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['playground'].errors?.required">
+                        Task is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="groupForm.controls.activity.value == 'Building'">
+                    <mat-select placeholder="Street" required formControlName="street">
+                        <mat-optgroup *ngFor="let playground of playgrounds" [label]="playground.name" [style.background-color]="playground.color">
+                            <mat-option *ngFor="let street of playground.streets" [value]="street" [style.background-color]="playground.color">
+                                {{street}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['street'].errors?.required">
+                        Street is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field *ngIf="groupForm.controls.activity.value != ''">
+                    <mat-select placeholder="District" required formControlName="district">
+                        <mat-option *ngFor="let district of districts" [value]="district">
+                            {{district}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupForm.controls['district'].errors?.required">
+                        District is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+            </form>
+            <div class="dialog-actions">
+                <button mat-button (click)="createGroup()" [style.background-color]="!formValid ? 'grey' : '#31b631'" [disabled]="!formValid">Create Group</button>
+            </div>
+        </div>
+</div>

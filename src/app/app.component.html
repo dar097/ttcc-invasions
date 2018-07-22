@@ -6,9 +6,9 @@
     <span *ngIf="message">&nbsp{{message}}</span>
     <span class="filler"></span>
     <mat-chip-list class="nav-chips">
-      <mat-chip [routerLink]="['/']" class="bg-accent drop-shadow">Invasions</mat-chip>
-      <mat-chip [routerLink]="['/history']" class="bg-accent drop-shadow">History</mat-chip>
-      <mat-chip [routerLink]="['/groups']" class="bg-accent drop-shadow">Group Finder</mat-chip>
+      <mat-chip *ngIf="active_route != '/' && active_route != '/invasions'" [routerLink]="['/']" class="bg-accent drop-shadow" id="r-invasions">Invasions</mat-chip>
+      <mat-chip *ngIf="active_route != '/history'" [routerLink]="['/history']" class="bg-accent drop-shadow" id="r-history">History</mat-chip>
+      <!-- <mat-chip *ngIf="active_route != '/groups'" [routerLink]="['/groups']" class="bg-accent drop-shadow" id="r-groups">Group Finder</mat-chip> -->
       <!-- [routerLink]="['/invasions']" -->
     </mat-chip-list>
   </mat-toolbar-row>

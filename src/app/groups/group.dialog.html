@@ -1,14 +1,14 @@
-<div style="width: 500px; position: relative; min-width: 256px;" class="dialog-content" id="dialog-group">
-    <div style="width: 100%; height: 120px; text-align: center;" class="dialog-header" [style.background-image]="getRightImage()">
+<div class="dialog-content" id="dialog-group">
+    <div class="dialog-header" [style.background-image]="getRightImage()">
         <div class="dialog-header-left" [style.background-image]="getActivityImage()">
         </div>
-        <img *ngIf="data.activity == 'Building'" [src]="getTypeImage(data.cog_type)" style="position: absolute; width: 48px; height: 48px; border-radius: 50%; top: 36px; left: 56%;" />
-        <img *ngIf="data.activity == 'Facility' || data.activity == 'Boss(HQ)'" [src]="getTypeImage(getPlaygroundFromCog(data.facility_type || data.boss))" style="position: absolute; width: 48px; height: 48px; border-radius: 50%; top: 36px; left: 56%;" />
+        <img *ngIf="data.activity == 'Building'" [src]="getTypeImage(data.cog_type)" class="left-image"/>
+        <img *ngIf="data.activity == 'Facility' || data.activity == 'Boss(HQ)'" [src]="getTypeImage(getPlaygroundFromCog(data.facility_type || data.boss))" class="left-image"/>
 
-        <div style="height: 120px; text-align: right; padding-right: 1%; padding-top: 6px;">
-            <mat-icon style="color: #c52b2b; background-color: rgba(255,255,255,0.7); border-radius: 50%; cursor: pointer;" (click)="closeDia()">close</mat-icon>
+        <div class="close-div">
+            <mat-icon class="close-icon" (click)="closeDia()">close</mat-icon>
         </div>
-        <div *ngIf="data.activity == 'Building'" class="stories" style="position: absolute; height: 24px; left: 5%; top: 108px;" [matTooltip]="data.building_level + ' Stories'" matTooltipPosition="right">
+        <div *ngIf="data.activity == 'Building'" class="stories" [matTooltip]="data.building_level + ' Stories'" matTooltipPosition="right">
             <div class="story" *ngFor="let item of makeArray(data.building_level)"></div>
         </div>
     </div>
@@ -45,7 +45,7 @@
             <tbody>
                 <tr>
                     <td>
-                        {{data.facility_type.split('-')[1].split('/')[0]}} {{data.facility_type.split('-')[0]}} <span *ngIf="data.facility_type.split('/').length > 1">data.facility_type.split('/')[1]</span>
+                        {{data.facility_type.split('-')[1].split('/')[0]}} {{data.facility_type.split('-')[0]}} <span *ngIf="data.facility_type.split('/').length > 1">{{data.facility_type.split('/')[1]}}</span>
                     </td>
                     <td>
                         {{getPlaygroundFromCog(data.facility_type)}}
@@ -103,10 +103,10 @@
                         <mat-divider></mat-divider>
                     <tr>
                         <td>
-                            <span style="margin: 0; font-weight: normal; font-size: 20px;">
+                            <span class="toon-details">
                                     <div *ngIf="false" class="toon-icon" [style.background-image]="getToonImage(toonData.toon.species, false)"></div>
                                     {{toonData.toon.name}} (Laff: {{toonData.toon.laff}})
-                                    <span *ngIf="toonData.count > 1" style="font-size: 16px;">
+                                    <span *ngIf="toonData.count > 1">
                                         +{{toonData.count-1}} friend<span *ngIf="toonData.count > 2">s</span>
                                     </span>
                             </span>
@@ -118,6 +118,7 @@
     </div>
     <div class="dialog-actions">
         <button mat-button class="dialog-button" id="group-btn" (click)="group()"  [style.background-color]="(inThisGroup ? '#c52b2b' : (isFull ? 'grey' : '#31b631'))" [disabled]="isFull && !inThisGroup">{{inThisGroup ? 'Leave' : 'Join'}}</button>
+        <button *ngIf="inThisGroup && !isFull" mat-button class="dialog-button" (click)="group(true)"  [style.background-color]="'#31b631'">Add a friend</button>
     </div>
 
     <!-- <div class="dialog-content-side side-left">

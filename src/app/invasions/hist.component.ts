@@ -20,10 +20,7 @@ export class HistoryComponent implements AfterViewInit {
   
   constructor(public invasionsService: InvasionsService, private pushNotifications: PushNotificationsService, public router: Router){
     pushNotifications.requestPermission();
-    let instance = this;
-    window.onresize = function(){
-      instance.onResize(); 
-    }
+    window.addEventListener('resize', this.onResize);
 
     this.refresh();
     // setInterval(function(){
@@ -67,6 +64,8 @@ export class HistoryComponent implements AfterViewInit {
 
   refresh(){
     this.isLoading = true;
+    if(!this.invasionsService)
+      return;
     this.invasionsService.getHistorydata().subscribe(
       res=>{
         // console.log(res);

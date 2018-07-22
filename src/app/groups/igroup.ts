@@ -12,7 +12,7 @@ export interface IGroup{
     district: string,
     host: IToon,
     toons: IToon[],
-    created: Date
+    created?: Date
 }
 
 /*

@@ -1,51 +1,35 @@
-<!-- <div class="left-floats">
+<div class="left-floats">
     <div fxLayout="column" class="mini-floater" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Population: ' + (districts.length ? population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
-            <mat-icon>people</mat-icon>
+        <button *ngIf="!toonInGroup" mat-mini-fab class="floater bg-success" matTooltip="Create Group" matTooltipPosition="right" (click)="createGroup()"> 
+            <mat-icon>add</mat-icon>
         </button>
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Districts: ' + (districts.length ? districts.length : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
-            <mat-icon>place</mat-icon>
-        </button>
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Invasions: ' + (districts.length ? invasions : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
-            <mat-icon>android</mat-icon>
+        <button mat-mini-fab class="floater bg-success" (click)="popToon(hasToon ? 'Edit' : 'Create')" [matTooltip]="(hasToon ? 'Edit' : 'Create') + ' Toon'" matTooltipPosition="right">
+            <mat-icon *ngIf="hasToon">edit</mat-icon>
+            <mat-icon *ngIf="!hasToon">add</mat-icon>
         </button>
     </div>
-    <button mat-fab class="floater" [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
+    <button mat-fab class="floater bg-success" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
         <mat-icon>add</mat-icon>
     </button>
-
-</div> -->
+<!--
+    <button mat-fab class="floater bg-success" (click)="popToon(hasToon ? 'Edit' : 'Create')">
+        <mat-icon *ngIf="hasToon">edit</mat-icon>
+        <mat-icon *ngIf="!hasToon">add</mat-icon>
+    </button>
+-->
+</div>
 <div fxLayout="column">
     <!-- <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
         fxLayout="row"
         color="warn"
         mode="indeterminate">
     </mat-progress-bar>
-    <div *ngIf="lastRequestDown" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
+    -->
+    <div *ngIf="groups.length == 0" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
         <mat-card>
-            <mat-card-title style="color: crimson; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;SERVERS ARE DOWN&nbsp;<mat-icon class="icons">warning</mat-icon></mat-card-title>
+            <mat-card-title style="color: #f6c420; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;No Groups Active&nbsp;<mat-icon class="icons">warning</mat-icon><br/>Hover over the button at the bottom left to create one.</mat-card-title>
         </mat-card>
     </div>
-    <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="isFirstLoad">
-        <ng-container *ngFor="let index of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
-            <mat-card class="group-card drop-shadow">
-                <div class="mat-card-left">
-                    <h3 style="position: absolute;">
-                        Loading...
-                    </h3>
-                    <br/>
-                    <mat-divider></mat-divider>
-                    <div class="divider"></div>
-                    <mat-chip class="bg-primary drop-shadow moved">...</mat-chip>
-                    <div class="divider"></div>
-                    <mat-chip class="bg-accent drop-shadow moved">...</mat-chip>
-    
-                </div>
-                <div class="mat-card-right">
-                </div>
-            </mat-card>
-        </ng-container>
-    </div> -->
     <div class="groups" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="!lastRequestDown">
         <ng-container *ngFor="let group of groups; let i = index;">
             <mat-card class="group-card drop-shadow" (click)="viewGroup(i)">
@@ -76,7 +60,11 @@
                     <img *ngIf="width > 320 && group.activity == 'Boss(HQ)'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/cogs/' + group.boss.split('.').join('') + '.png'" onError="this.src='./assets/logo_icon.png'"/>
                     <img *ngIf="width > 320 && group.activity == 'Boss(Playground)'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/places/' + group.playground + '-boss.png'" onError="this.src='./assets/logo_icon.png'"/>
 
-                    <img *ngIf="width <= 320" style="margin-top: 10px; margin-left: 10px;" class="drop-shadow-thicc" mat-card-sm-image [src]="group.activity" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width <= 320 && group.activity == 'Building'" class="drop-shadow-thicc" mat-card-sm-image [src]="'./assets/places/' + group.building_level + '-Building.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width <= 320 && group.activity == 'Facility'" class="drop-shadow-thicc" mat-card-sm-image [src]="'./assets/places/' + group.facility_type.split('-')[0] + '.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width <= 320 && group.activity == 'Boss(HQ)'" class="drop-shadow-thicc" mat-card-sm-image [src]="'./assets/cogs/' + group.boss.split('.').join('') + '.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    <img *ngIf="width <= 320 && group.activity == 'Boss(Playground)'" class="drop-shadow-thicc" mat-card-md-image [src]="'./assets/places/' + group.playground + '-boss.png'" onError="this.src='./assets/logo_icon.png'"/>
+                    
                     <div class="drop-shadow-thicc" *ngIf="group.activity == 'Building'" mat-card-avatar [style.background-image]="getCogType(group.cog_type)"></div>
                     <div class="drop-shadow-thicc" *ngIf="group.activity == 'Facility' || group.activity == 'Boss(HQ)'" mat-card-avatar [style.background-image]="getCogType(getCogPlayground(group.facility_type || group.boss))"></div>
                 </div>

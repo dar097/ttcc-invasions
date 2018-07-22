@@ -1,0 +1,57 @@
+<div style="background-image: url(./assets/toontorial.jpg); background-size: contain; background-repeat: no-repeat; width: 660px; height: 430px; position: relative;" id="dialog-toon">
+    <div style="position: absolute; right: 1%; padding-top: 6px;">
+            <mat-icon style="color: #c52b2b; background-color: rgba(255,255,255,0.7); border-radius: 50%; cursor: pointer;" (click)="closeDia()">close</mat-icon>
+        </div>
+    <div class="whiteboard" style="position: absolute; top: 0; width: 64%; height: 71%; margin-left: 10%; margin-right: 26%; margin-bottom: 29%;">
+        <div class="toon-header" style="text-align: center;">
+            <h1 class="m-0">{{data}} your Toon</h1>
+        </div>
+        <br/>
+        <div fxHide fxShow.lt-sm>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+        <form [formGroup]="toonForm">
+            <mat-form-field>
+                <input matInput placeholder="Toon Name" type="text" formControlName="name" required>
+                <mat-error *ngIf="toonForm.controls['name'].errors?.required">
+                    Name is <strong>required</strong>.
+                </mat-error>
+            </mat-form-field>
+            &nbsp;
+            <mat-form-field>
+                <input matInput placeholder="Laff" type="number" formControlName="laff" min=15 max=150 required>
+                <mat-error *ngIf="toonForm.controls['laff'].errors?.required">
+                    Laff is <strong>required</strong>.
+                </mat-error>
+            </mat-form-field>
+            &nbsp;
+
+            <mat-form-field>
+                <mat-select placeholder="Toon Species" required formControlName="species">
+                    <mat-option *ngFor="let s of species" [value]="s">
+                        {{s}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="toonForm.controls['species'].errors?.required">
+                    Name is <strong>required</strong>.
+                </mat-error>
+            </mat-form-field>
+            <br/>
+            <div style="width: 80%">
+                <mat-slider style="width: 50%" max="360" min="0" [thumbLabel]="true" formControlName="color" (input)="setValue('color', $event)"></mat-slider>
+                <mat-slider style="width: 50%" max="100" min="0" [thumbLabel]="true" formControlName="saturation" (input)="setValue('saturation', $event)"></mat-slider>
+            </div>
+
+            <div>
+                <img id="toon-image" [ngStyle]="colorStyle" [src]="'./assets/species/' + toonForm.controls.species.value + '.png'" onError="this.src='./assets/logo_icon.png'" style="width: 64px; height: 64px; margin: 0 40%;"/>
+            </div>
+
+            <div>
+                <button mat-stroked-button style="margin: 0 35%; margin-top: 18%;" [disabled]="!toonForm.valid" (click)="save()">{{data}} Toon</button>
+            </div>
+
+        </form>
+    </div>
+</div>

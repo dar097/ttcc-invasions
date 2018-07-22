@@ -1,5 +1,5 @@
 import {Component, Inject, Host} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA, MatSnackBar} from '@angular/material';
 import { IGroup } from './igroup';
 import { Subscription } from '../../../node_modules/rxjs';
 import { SocketService } from '../socket.service';
@@ -13,15 +13,15 @@ import { GroupService } from './groups.service';
   })
   export class GroupDialog {
       sortedToons: any[] = [];
-      inThisGroup: boolean = false;
+      inThisGroup: string = null;
       isFull: boolean = false;
       ioConnection: Subscription;
-    constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: IGroup, public socketService: SocketService, public groupService: GroupService) {
+    constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: IGroup, public socketService: SocketService, public groupService: GroupService, public snackBar: MatSnackBar) {
         this.sortToons();
-        window.onresize = this.onResize;
+        window.addEventListener('resize', this.onResize);
         setTimeout(this.onResize,100);
         this.initConnection();
-        let localToon = localStorage.getItem('Toon');
+        let localToon = localStorage.getItem('toon');
         if(!localToon)
             this.dialogRef.close('notoon');
     }
@@ -75,8 +75,8 @@ import { GroupService } from './groups.service';
         return Array(count).fill(1);
     }
 
-    closeDia(){
-        this.dialogRef.close();
+    closeDia(data?: string){
+        this.dialogRef.close(data);
     }
 
     getBossTaskLocation(): string {
@@ -97,14 +97,29 @@ import { GroupService } from './groups.service';
         return street;
       }
 
-    group() {
+    group(bypass?: boolean) {
         let toon = localStorage.getItem('toon');
         if(toon)
         {
-            if(this.inThisGroup)
-                this.groupService.leaveGroup(this.data._id);
+            if(this.inThisGroup && !bypass)
+            {
+                this.groupService.leaveGroup(this.data._id).subscribe(
+                    res=>{
+                        this.closeDia('left');
+                    },
+                    error=> this.snackBar.open(error, null, { duration: 1000})
+                );
+            }
             else
-                this.groupService.joinGroup(this.data._id);
+            {
+                this.groupService.joinGroup(this.data._id).subscribe(
+                    res=>{
+                        this.sortToons();
+                        this.snackBar.open(bypass ? 'Added a friend.' : res.message, null, { duration: 1000})
+                    },
+                    error=> this.snackBar.open(error, null, { duration: 1000})
+                );
+            }
         }
         else
         {
@@ -117,13 +132,13 @@ import { GroupService } from './groups.service';
         this.isFull = tooncount >= (this.data.activity == 'Boss(HQ)' ? 8 : 4);
         this.sortedToons = [{ toon: this.data.host, count: 1}];
         let localToon = localStorage.getItem('toon');
-        if(localToon && (this.data.host._id == localToon || this.data.toons.filter(t => t._id == localToon).length > 1))
+        if(localToon && (this.data.host._id == localToon || this.data.toons.filter(t => t._id == localToon).length >= 1))
         {
-            this.inThisGroup = true;
+            this.inThisGroup = localToon;
         }
         else
         {
-            this.inThisGroup = false;
+            this.inThisGroup = null;
             if(!localToon)
             {
                 this.dialogRef.close('notoon');

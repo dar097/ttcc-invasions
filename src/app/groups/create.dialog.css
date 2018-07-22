@@ -1,0 +1,17 @@
+.dialog-content{
+    width: 450px; 
+    position: relative; 
+    min-width: 256px;
+}
+
+.dialog-header{
+    background-size: 60% 100%;
+    background-position: 125% 0;
+    width: 100%; 
+    text-align: center;
+}
+
+.dialog-actions{
+    margin: 0 auto;
+    display: table;
+}
