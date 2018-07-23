@@ -25,6 +25,9 @@
                 <mat-error *ngIf="toonForm.controls['laff'].errors?.required">
                     Laff is <strong>required</strong>.
                 </mat-error>
+                <mat-error *ngIf="toonForm.controls['laff'].errors?.min || toonForm.controls['laff'].errors?.max">
+                    Laff is <strong>invalid</strong>.
+                </mat-error>
             </mat-form-field>
             &nbsp;
 

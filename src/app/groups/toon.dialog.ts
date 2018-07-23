@@ -38,7 +38,7 @@ import { IToon } from './itoon';
 
         this.toonForm = this.fb.group({
             name:['', Validators.required],
-            laff: [15, Validators.required],
+            laff: [15, [Validators.required, Validators.min(15), Validators.max(150)]],
             species: ['', Validators.required],
             color: [{ value: 50, disabled: true}, Validators.required],
             saturation: [{ value: 100, disabled: true}]      
