@@ -7,8 +7,8 @@ import { IToon } from './itoon';
 
 @Injectable()
 export class GroupService {
-    private dev_url: string = 'https://fathomless-inlet-84992.herokuapp.com';
-    private url: string = 'http://localhost:5000';
+    private url: string = 'https://fathomless-inlet-84992.herokuapp.com';
+    private dev_url: string = 'http://localhost:5000';
     
     constructor(private http: HttpClient) {
 
