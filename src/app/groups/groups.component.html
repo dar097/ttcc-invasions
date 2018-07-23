@@ -18,7 +18,10 @@
     </button>
 -->
 </div>
-<div fxLayout="column">
+<div fxLayout="column" style="position: relative;">
+        <div style="position: absolute; top: 5px; left: 5px;">
+            <mat-chip class="bg-accent drop-shadow">{{toonCount}} Toons connected.</mat-chip>
+        </div>
     <!-- <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
         fxLayout="row"
         color="warn"

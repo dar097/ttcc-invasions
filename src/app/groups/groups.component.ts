@@ -30,6 +30,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   createDialog: MatDialogRef<any, any>;
   hasToon: boolean = false;
   toonInGroup: boolean = false;
+  toonCount = 0;
   
   constructor(public groupService: GroupService, private pushNotifications: PushNotificationsService, public router: Router, public socketService: SocketService, public dialog: MatDialog){
     pushNotifications.requestPermission();
@@ -75,6 +76,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
         this.groups.splice(group_index, 1);
       }
     );
+
+    this.socketService.onCountChange().subscribe(count => this.toonCount = count);
 
     this.socketService.onGroupPurge().subscribe(
       () => {

@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { Router, NavigationEnd } from '../../node_modules/@angular/router';
-import { filter } from '../../node_modules/rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',

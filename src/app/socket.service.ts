@@ -33,9 +33,21 @@ export class SocketService {
         });
     }
 
+    public onCountChange(): Observable<number> {
+        return new Observable<number>(observer => {
+            this.socket.on('countchange', (data: number) => observer.next(data));
+        });
+    }
+
     public onNoMoreGroup(): Observable<string> {
         return new Observable<string>(observer => {
             this.socket.on('nomoregroup', (data: string) => observer.next(data));
+        });
+    }
+
+    public serverMessage(): Observable<string> {
+        return new Observable<string>(observer => {
+            this.socket.on('sys-message', (data: string) => observer.next(data));
         });
     }
 
