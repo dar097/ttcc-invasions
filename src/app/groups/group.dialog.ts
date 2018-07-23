@@ -183,7 +183,7 @@ import { GroupService } from './groups.service';
         case 'Daisy Drive': case 'Sunflower Street': case 'Petunia Place': case 'Tulip Terrace':
             playground = 'Daffodil Gardens';
         break;
-        case 'Alto Avenue': case 'Baritone Boulevard': case 'Soprano Street': case 'Teno Terrace':
+        case 'Alto Avenue': case 'Baritone Boulevard': case 'Soprano Street': case 'Tenor Terrace':
             playground = 'Mezzo Melodyland';
         break;
         case 'Sleet Street': case 'Walrus Way': case 'Artic Avenue': case 'Polar Place':

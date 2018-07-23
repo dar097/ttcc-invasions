@@ -50,7 +50,7 @@
                     <mat-divider></mat-divider>
                     <div class="divider"></div>
                     <mat-chip *ngIf="group.activity == 'Building'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="getPlayground(group.street)">{{group.street}}</mat-chip>
-                    <mat-chip *ngIf="group.activity == 'Facility'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{group.facility_type.split('-')[1]}}</mat-chip>
+                    <mat-chip *ngIf="group.activity == 'Facility'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{group.facility_type.includes('DA Office') ? group.facility_type.split('/')[0] : group.facility_type.split('-')[1]}}</mat-chip>
                     <mat-chip *ngIf="group.activity == 'Boss(HQ)'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{getCogPlayground(group.boss)}}</mat-chip>
                     <mat-chip *ngIf="group.activity == 'Boss(Playground)'" class="bg-primary drop-shadow moved" (click)="viewGroup(i)" [matTooltip]="">{{getBossTaskLocation(group.playground)}}</mat-chip>
 
