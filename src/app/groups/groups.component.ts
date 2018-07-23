@@ -31,6 +31,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   hasToon: boolean = false;
   toonInGroup: boolean = false;
   toonCount = 0;
+  admin: boolean = false;
   
   constructor(public groupService: GroupService, private pushNotifications: PushNotificationsService, public router: Router, public socketService: SocketService, public dialog: MatDialog){
     pushNotifications.requestPermission();
@@ -43,6 +44,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
     this.refresh();
 
     this.hasToon = localStorage.getItem('toon') != null;
+    this.admin = localStorage.getItem('adminpass') == 'systemadminbypass';
 
   }
 
@@ -151,6 +153,10 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
     {
       this.popToon('Create');
     }
+  }
+
+  deleteGroup(index: number){
+    this.groupService.deleteGroup(this.groups[index]._id).subscribe();
   }
 
   onResize(){

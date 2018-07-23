@@ -7,8 +7,8 @@ import { IToon } from './itoon';
 
 @Injectable()
 export class GroupService {
-    private url: string = 'https://fathomless-inlet-84992.herokuapp.com';
-    private dev_url: string = 'http://localhost:5000';
+    private dev_url: string = 'https://fathomless-inlet-84992.herokuapp.com';
+    private url: string = 'http://localhost:5000';
     
     constructor(private http: HttpClient) {
 
@@ -56,6 +56,10 @@ export class GroupService {
 
     leaveGroup(group: string): Observable<any> {
         return this.http.post<any>(this.url + '/group/leave',{ toon: localStorage.getItem('toon'), group: group }).pipe(catchError(this.handleError));
+    }
+
+    deleteGroup(group: string): Observable<any>{
+        return this.http.post<any>(this.url + '/group/delete',{ adminpass: localStorage.getItem('toon'), group: group }).pipe(catchError(this.handleError));
     }
     
 
