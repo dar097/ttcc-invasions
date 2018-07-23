@@ -41,7 +41,7 @@ import { GroupService } from './groups.service';
         this.socketService.onNoMoreGroup().subscribe(
           group_id => {
             if(group_id == this.data._id)
-                this.dialogRef.close('notoon');
+                this.dialogRef.close('left');
           }
         );
     

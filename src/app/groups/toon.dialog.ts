@@ -128,7 +128,7 @@ import { IToon } from './itoon';
         {
             let newToon: IToon = this.toonForm.value;
             newToon.color = this.toonForm.controls.color.value + '-' + this.toonForm.controls.saturation.value;
-            console.log(newToon); 
+            // console.log(newToon); 
             
             if(this.data == 'Create')
             {
@@ -149,7 +149,7 @@ import { IToon } from './itoon';
                         this.closeDia();
                     },
                     error => {
-                        console.log(error);
+                        // console.log(error);
                         this.snackbar.open(error, null, { duration: 1000 });
                     }
                 );
@@ -161,7 +161,7 @@ import { IToon } from './itoon';
         }
         else
         {
-            console.log(this.toonForm);
+            // console.log(this.toonForm);
             this.snackbar.open('Please fill all required fields.', null, { duration: 1000 });
         }
     }

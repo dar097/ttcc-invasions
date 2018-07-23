@@ -87,8 +87,8 @@ export class HistoryComponent implements AfterViewInit {
         
       },
       error => {
-        console.log('error retrieving district data');
-        console.log(error);
+        // console.log('error retrieving district data');
+        // console.log(error);
       }
     );
   }

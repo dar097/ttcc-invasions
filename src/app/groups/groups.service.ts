@@ -37,7 +37,7 @@ export class GroupService {
         {
             if(groupObj[item] == null)
             {
-                console.log(item)
+                // console.log(item)
                 delete groupObj[item];
             }
         }

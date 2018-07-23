@@ -46,19 +46,19 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
     this.socketService.initSocket();
     this.ioConnection = this.socketService.onDistrict().subscribe(
       district => {
-        console.log(district);
+        // console.log(district);
       }
     );
 
     this.socketService.onEvent(Event.CONNECT).subscribe(
       () => {
-        console.log('connected');
+        // console.log('connected');
       }
     );
       
     this.socketService.onEvent(Event.DISCONNECT).subscribe(
       () => {
-        console.log('disconnected');
+        // console.log('disconnected');
       }
     );
   }*/
@@ -117,7 +117,7 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
         if(res.length == 0)
         {
           this.lastRequestDown = true;
-          console.log('servers are probably down.');
+          // console.log('servers are probably down.');
         } 
         else
         {
@@ -169,7 +169,7 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
 
             if(instance.districts[district.name] && district.last_update === instance.districts[district.name].last_update)
             {
-              console.log('hello govna');
+              // console.log('hello govna');
               district = instance.districts[district.name];
             }
           }, this);
@@ -196,8 +196,8 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
         }
       },
       error => {
-        console.log('error retrieving district data');
-        console.log(error);
+        // console.log('error retrieving district data');
+        // console.log(error);
       }
     );
   }

@@ -112,7 +112,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
         this.groupForm.controls.activity.valueChanges.subscribe(
             (value: string) => {
-                console.log(value);
+                // console.log(value);
                 var required = [];
                 var notrequired = [];
                 switch(value)

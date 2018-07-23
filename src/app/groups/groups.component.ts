@@ -103,7 +103,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   }
 
   popToon(data){
-    console.log(data);
+    // console.log(data);
     if(data != 'Create' && data != 'Edit')
       return;
 
@@ -255,8 +255,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
   reorderGroups(){
     var groups = this.groups.sort(function(a,b) {
-      console.log(a);
-      console.log(b);
+      // console.log(a);
+      // console.log(b);
       if (a.created > b.created)
         return -1;
       if (a.created < b.created)
