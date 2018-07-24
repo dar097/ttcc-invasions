@@ -289,7 +289,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
   refresh(){
     this.isLoading = true;
-    let getGroups = this.groupService.getGroups().subscribe(
+    this.groupService.getGroups().subscribe(
       res=>{
         // console.log(res);
         if(!res)
@@ -303,9 +303,6 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
           this.isFirstLoad = false;
 
         this.initConnection(); 
-        setTimeout(function(){
-          getGroups.unsubscribe();
-        }, 1000);
       },
       error => {
         console.log('Error retrieving group data');
