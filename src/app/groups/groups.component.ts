@@ -75,7 +75,8 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
           return group._id == group_id;
         });
 
-        this.groups.splice(group_index, 1);
+        if(group_index != -1)
+          this.groups.splice(group_index, 1);
       }
     );
 
