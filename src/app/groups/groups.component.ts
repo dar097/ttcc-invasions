@@ -44,6 +44,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
     instance.onResize();
     this.refresh();
+    this.initConnection();
 
     this.hasToon = localStorage.getItem('toon') != null;
     this.admin = localStorage.getItem('adminpass') == 'systemadminbypass';
@@ -312,7 +313,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
         if(this.isFirstLoad)
           this.isFirstLoad = false;
 
-        this.initConnection(); 
+        // this.initConnection(); 
       },
       error => {
         console.log('Error retrieving group data');
