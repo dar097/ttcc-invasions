@@ -22,9 +22,9 @@
 </div>
 </div>
 <div fxLayout="column" style="position: relative;">
-        <div style="position: absolute; top: 5px; left: 5px;">
+        <!-- <div style="position: absolute; top: 5px; left: 5px;">
             <mat-chip class="bg-accent drop-shadow">{{toonCount}} Toons connected.</mat-chip>
-        </div>
+        </div> -->
     <!-- <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
         fxLayout="row"
         color="warn"
@@ -47,8 +47,8 @@
                         <span *ngIf="group.activity == 'Boss(Playground)'">Task Boss</span>
                     </h3>
                     <mat-chip *ngIf="admin" class="timer" style="background-color: crimson; left: 45%; border-bottom-right-radius: 24px; width: 10%; padding-left: 4%;" matTooltip="Delete Group" (click)="deleteGroup(i)">
-                            x
-                        </mat-chip>
+                        x
+                </mat-chip>
                     <mat-chip class="timer" [style.background-color]="group.toons.length + 1 < (group.activity == 'Boss(HQ)' ? 8 : 4) ? '#2cc218' : 'crimson'" matTooltip="Group Size" (click)="viewGroup(i)">
                         {{group.toons.length + 1}}/{{group.activity == 'Boss(HQ)' ? 8 : 4}}
                     </mat-chip>

@@ -20,19 +20,19 @@
         <table class="dialog-table" *ngIf="data.activity == 'Building'">
             <thead>
                 <th>Objective</th>
-                <th>Street</th>
-                <th>Playground</th>
+                <th>Area</th>
+                <th>District</th>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        {{data.building_level}} Story {{data.cog_type}} Building
+                        {{data.building_level}} Story<br/>{{data.cog_type}} Building
                     </td>
                     <td>
-                        {{data.street}}
+                        {{data.street}}<br/>{{getPlaygroundFromStreet(data.street)}}
                     </td>
                     <td>
-                        {{getPlaygroundFromStreet(data.street)}}
+                        {{data.district}}
                     </td>
                 </tr>
             </tbody>
@@ -41,6 +41,7 @@
             <thead>
                 <th>Objective</th>
                 <th>Area</th>
+                <th>District</th>
             </thead>
             <tbody>
                 <tr>
@@ -50,6 +51,9 @@
                     <td>
                         {{getPlaygroundFromCog(data.facility_type)}}
                     </td>
+                    <td>
+                        {{data.district}}
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -57,6 +61,7 @@
             <thead>
                 <th>Objective</th>
                 <th>Area</th>
+                <th>District</th>
             </thead>
             <tbody>
                 <tr>
@@ -66,14 +71,17 @@
                     <td>
                         {{getPlaygroundFromCog(data.boss)}}
                     </td>
+                    <td>
+                        {{data.district}}
+                    </td>
                 </tr>
             </tbody>
         </table>
         <table class="dialog-table" *ngIf="data.activity == 'Boss(Playground)'">
             <thead>
                 <th>Objective</th>
-                <th>Street</th>
-                <th>Playground</th>
+                <th>Area</th>
+                <th>District</th>
             </thead>
             <tbody>
                 <tr>
@@ -81,10 +89,10 @@
                         Toontask
                     </td>
                     <td>
-                        {{getBossTaskLocation()}}
+                        {{getBossTaskLocation()}}<br/>{{data.playground}}
                     </td>
                     <td>
-                        {{data.playground}}
+                        {{data.district}}
                     </td>
                 </tr>
             </tbody>

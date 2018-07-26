@@ -24,7 +24,9 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   title = 'Group Finder';
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
-  ioConnection: Subscription;
+  onGroupSub: Subscription;
+  onNoGroupSub: Subscription;
+  onPurgeSub: Subscription;
   groupDialog: MatDialogRef<any, any>;
   toonDialog: MatDialogRef<any, any>;
   createDialog: MatDialogRef<any, any>;
@@ -50,43 +52,51 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
 
   initConnection(){
     this.socketService.initSocket();
-    this.ioConnection = this.socketService.onGroup().subscribe(
-      group => {
-        let group_index: number = this.groups.findIndex(function(queriedGroup, index) {
-          return queriedGroup._id == group._id;
-        });
-
-
-        if(group_index != -1)
-        {
-          this.groups[group_index] = group;
+    if(!this.onGroupSub)
+    {
+      this.onGroupSub = this.socketService.onGroup().subscribe(
+        group => {
+          let group_index: number = this.groups.findIndex(function(queriedGroup, index) {
+            return queriedGroup._id == group._id;
+          });
+  
+  
+          if(group_index != -1)
+          {
+            this.groups[group_index] = group;
+          }
+          else
+            this.groups.push(group);
+  
+          this.reorderGroups();
         }
-        else
-          this.groups.push(group);
+      );
+    }
 
-        this.reorderGroups();
-      }
-    );
+    if(!this.onNoGroupSub)
+    {
+      this.onNoGroupSub = this.socketService.onNoMoreGroup().subscribe(
+        group_id => {
+          let group_index: number = this.groups.findIndex(function(group, index) {
+            
+            return group._id == group_id;
+          });
+  
+          if(group_index != -1)
+            this.groups.splice(group_index, 1);
+        }
+      );
+    }
 
-    this.socketService.onNoMoreGroup().subscribe(
-      group_id => {
-        let group_index: number = this.groups.findIndex(function(group, index) {
-          
-          return group._id == group_id;
-        });
-
-        if(group_index != -1)
-          this.groups.splice(group_index, 1);
-      }
-    );
-
-    this.socketService.onCountChange().subscribe(count => this.toonCount = count);
-
-    this.socketService.onGroupPurge().subscribe(
-      () => {
-        this.refresh();
-      }
-    );
+    //this.socketService.onCountChange().subscribe(count => this.toonCount = count);
+    if(!this.onPurgeSub)
+    {
+      this.onPurgeSub = this.socketService.onGroupPurge().subscribe(
+        () => {
+          this.refresh();
+        }
+      );
+    }
 
     // this.socketService.onEvent(Event.CONNECT).subscribe(
     //   () => {
@@ -181,7 +191,7 @@ export class GroupComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ioConnection = null;
+    this.onGroupSub = null;
     this.socketService.closeSocket();
   }
 
