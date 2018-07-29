@@ -8,7 +8,7 @@ import { IGroup } from './groups/igroup';
 import { isDevMode } from '@angular/core';
 import { ServerInfo } from './invasions/invs.component';
 
-const SERVER_URL = isDevMode() ? 'http://localhost:5000' : 'https://fathomless-inlet-84992.herokuapp.com';
+const SERVER_URL = /*isDevMode() ? 'http://localhost:5000' :*/ : 'https://fathomless-inlet-84992.herokuapp.com';
 
 @Injectable()
 export class SocketService {

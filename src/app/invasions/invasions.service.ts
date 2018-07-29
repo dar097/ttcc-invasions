@@ -8,7 +8,7 @@ import { ServerInfo } from './invs.component';
 
 @Injectable()
 export class InvasionsService {
-    private url: string = isDevMode() ? 'http://localhost:5000' : 'https://fathomless-inlet-84992.herokuapp.com';
+    private url: string = /*isDevMode() ? 'http://localhost:5000' :*/ 'https://fathomless-inlet-84992.herokuapp.com';
     
     constructor(private http: HttpClient) {
 
