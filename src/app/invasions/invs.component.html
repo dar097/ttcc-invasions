@@ -34,7 +34,7 @@
                     <h3 style="position: absolute;">
                         {{district.name}} 
                     </h3>
-                    <mat-chip *ngIf="district.invasion_online" class="timer" [style.background-color]="district.remaining_time > 60 ? '#2cc218' : 'crimson'" matTooltip="Estimate time remaining">
+                    <mat-chip (click)="notify(district)" *ngIf="district.invasion_online" class="timer" [style.background-color]="district.remaining_time > 60 ? '#2cc218' : 'crimson'" matTooltip="Estimate time remaining">
                         {{district.remaining_time | secondsToDate | date:'mm:ss' }}
                     </mat-chip>
                     <br/>

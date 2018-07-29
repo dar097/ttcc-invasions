@@ -20,9 +20,6 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
   lastRequestDown = false;
   population: number = 0;
   invasions: number = 0;
-  districtInvasions = {};
-  isLoading: boolean = false;
-  isFirstLoad: boolean = true;
   refreshLoop: any;
   invasionStart: Subscription;
   invasionChange: Subscription;
@@ -161,7 +158,10 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
   }
 
   notify(district: IDistrict){
-    this.pushNotifications.create('Invasion Alert', {tag: 'hello', body: '\nAn Invasion has started in ' + district.name + '!\n(' + district.cogs_attacking + ')', icon: './assets/cogs/' + district.cogs_attacking + '.png'}).subscribe(
+    var bodyString = 'An Invasion has started in ' + district.name + '!';
+    if(window.navigator.userAgent.includes('Firefox'))
+      bodyString = '\n' + bodyString;
+    this.pushNotifications.create('Invasion Alert (' + district.cogs_attacking + ')', {tag: 'hello', body: bodyString, icon: './assets/cogs/' + district.cogs_attacking + '.png'}).subscribe(
       res => {
           if (res.event.type === 'click') {
               res.notification.close();
@@ -200,7 +200,6 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
   }
   
   refresh(){
-    this.isLoading = false;
     let distCheck = this.invasionsService.getDistrictdata().subscribe(
       res=>{
         // console.log(res);
