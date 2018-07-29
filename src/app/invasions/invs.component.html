@@ -17,11 +17,11 @@
 </div>
 
 <div fxLayout="column">
-    <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
+    <!-- <mat-progress-bar [style.display]="isLoading ? 'block' : 'none'" style="position: absolute; width: 98%;"
         fxLayout="row"
         color="warn"
         mode="indeterminate">
-    </mat-progress-bar>
+    </mat-progress-bar> -->
     <div *ngIf="!districts.length" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
         <mat-card>
             <mat-card-title style="color: #f6c420; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;No Invasions at the Moment.&nbsp;<mat-icon class="icons">warning</mat-icon><br/>The Page automatically updates so there is no need to refresh.</mat-card-title>
