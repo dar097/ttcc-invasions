@@ -1,16 +1,16 @@
 <div class="left-floats">
     <div fxLayout="column" class="mini-floater" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Population: ' + (districts.length ? population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+        <button [class.bg-success]="serverInfo.population" [class.bg-danger]="!serverInfo.population" mat-mini-fab [matTooltip]="'Population: ' + (serverInfo.districts ? serverInfo.population : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (serverInfo.population ? 'online' : 'offline')"> 
             <mat-icon>people</mat-icon>
         </button>
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Districts: ' + (districts.length ? districts.length : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+        <button [class.bg-success]="serverInfo.districts" [class.bg-danger]="!serverInfo.districts" mat-mini-fab [matTooltip]="'Districts: ' + (serverInfo.districts ? serverInfo.districts : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (serverInfo.districts ? 'online' : 'offline')"> 
             <mat-icon>place</mat-icon>
         </button>
-        <button [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" mat-mini-fab [matTooltip]="'Invasions: ' + (districts.length ? invasions : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (districts.length ? 'online' : 'offline')"> 
+        <button [class.bg-success]="serverInfo.invasions" [class.bg-danger]="!serverInfo.invasions" mat-mini-fab [matTooltip]="'Invasions: ' + (serverInfo.districts ? serverInfo.invasions : 'Servers Offline')" matTooltipPosition="right" [matTooltipClass]="'floaters-tooltip ' + (serverInfo.invasions ? 'online' : 'offline')"> 
             <mat-icon>android</mat-icon>
         </button>
     </div>
-    <button mat-fab class="floater" [class.bg-success]="districts.length" [class.bg-danger]="!districts.length" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
+    <button mat-fab class="floater" [class.bg-success]="serverInfo.districts" [class.bg-danger]="!serverInfo.districts" [class.active]="hover" (mouseover)="hover = true;" (mouseout)="hover = false;">
         <mat-icon>add</mat-icon>
     </button>
 
@@ -22,32 +22,12 @@
         color="warn"
         mode="indeterminate">
     </mat-progress-bar>
-    <div *ngIf="lastRequestDown" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
+    <div *ngIf="!districts.length" fxLayout="row wrap" fxLayout.xs="column"  fxLayoutAlign="space-evenly center">
         <mat-card>
-            <mat-card-title style="color: crimson; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;SERVERS ARE DOWN&nbsp;<mat-icon class="icons">warning</mat-icon></mat-card-title>
+            <mat-card-title style="color: #f6c420; text-align: center;" [ngStyle.xs]="{'font-size.px': 20}"><mat-icon class="icons">warning</mat-icon>&nbsp;No Invasions at the Moment.&nbsp;<mat-icon class="icons">warning</mat-icon><br/>The Page automatically updates so there is no need to refresh.</mat-card-title>
         </mat-card>
     </div>
-    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="isFirstLoad">
-        <ng-container *ngFor="let index of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
-            <mat-card class="invasion-card drop-shadow">
-                <div class="mat-card-left">
-                    <h3 style="position: absolute;">
-                        Loading...
-                    </h3>
-                    <br/>
-                    <mat-divider></mat-divider>
-                    <div class="divider"></div>
-                    <mat-chip class="bg-primary drop-shadow moved">...</mat-chip>
-                    <div class="divider"></div>
-                    <mat-chip class="bg-accent drop-shadow moved">...</mat-chip>
-    
-                </div>
-                <div class="mat-card-right">
-                </div>
-            </mat-card>
-        </ng-container>
-    </div>
-    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="!lastRequestDown">
+    <div class="invasions" fxLayout="row wrap" fxLayout.xs="column" fxFlex="100" fxLayoutAlign="space-evenly center" *ngIf="districts.length">
         <ng-container *ngFor="let district of districts">
             <mat-card class="invasion-card drop-shadow" *ngIf="district.online">
                 <div class="mat-card-left">
@@ -61,7 +41,7 @@
                     <mat-divider></mat-divider>
                     <div class="divider"></div>
                     <mat-chip class="bg-primary drop-shadow moved" *ngIf="district.invasion_online" [style.background]="getGradient(district.count_defeated/district.count_total)"  [matTooltip]="(district.count_total-district.count_defeated) + ' Remaining'" matTooltipPosition="right">{{width > 350 ? 'Status: ' : '' }} {{district.count_defeated}}/{{district.count_total}}</mat-chip>
-                    <mat-chip class="bg-primary drop-shadow moved" *ngIf="!district.invasion_online" matTooltipPosition="right">No {{width > 350 ? 'Current' : '' }} Invasion</mat-chip>                
+                    <!-- <mat-chip class="bg-primary drop-shadow moved" *ngIf="!district.invasion_online" matTooltipPosition="right">No {{width > 350 ? 'Current' : '' }} Invasion</mat-chip>                 -->
                     <div class="divider"></div>
                     <mat-chip class="bg-accent drop-shadow moved">Population: {{district.population}}</mat-chip>
     

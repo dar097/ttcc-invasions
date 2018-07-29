@@ -1,14 +1,13 @@
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { filter, scan, catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IGroup } from './igroup';
 import { IToon } from './itoon';
 
 @Injectable()
 export class GroupService {
-    private url: string = 'https://fathomless-inlet-84992.herokuapp.com';
-    private dev_url: string = 'http://localhost:5000';
+    private url: string = isDevMode() ? 'http://localhost:5000' : 'https://fathomless-inlet-84992.herokuapp.com';
     
     constructor(private http: HttpClient) {
 

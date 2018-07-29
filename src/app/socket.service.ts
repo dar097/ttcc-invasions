@@ -5,8 +5,10 @@ import { IDistrict } from './invasions/idistrict';
 
 import * as socketIo from 'socket.io-client';
 import { IGroup } from './groups/igroup';
+import { isDevMode } from '@angular/core';
+import { ServerInfo } from './invasions/invs.component';
 
-const SERVER_URL = 'https://fathomless-inlet-84992.herokuapp.com';
+const SERVER_URL = isDevMode() ? 'http://localhost:5000' : 'https://fathomless-inlet-84992.herokuapp.com';
 
 @Injectable()
 export class SocketService {
@@ -26,6 +28,29 @@ export class SocketService {
             this.socket.on('district', (data: IDistrict) => observer.next(data));
         });
     }*/
+
+    public onServerInfo(): Observable<ServerInfo> {
+        return new Observable<ServerInfo>(observer => {
+            this.socket.on('serverinfo', (data: ServerInfo) => observer.next(data));
+        });
+    }
+
+    public onInvasionStart(): Observable<IDistrict> {
+        return new Observable<IDistrict>(observer => {
+            this.socket.on('invasionstart', (data: IDistrict) => observer.next(data));
+        });
+    }
+
+    public onInvasionChange(): Observable<IDistrict> {
+        return new Observable<IDistrict>(observer => {
+            this.socket.on('invasionupdate', (data: IDistrict) => observer.next(data));
+        });
+    }
+    public onInvasionEnd(): Observable<string> {
+        return new Observable<string>(observer => {
+            this.socket.on('invasionend', (data: string) => observer.next(data));
+        });
+    }
 
     public onGroup(): Observable<IGroup> {
         return new Observable<IGroup>(observer => {

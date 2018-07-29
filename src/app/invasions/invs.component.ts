@@ -4,6 +4,8 @@ import { InvasionsService } from './invasions.service';
 import { IDistrict } from './idistrict';
 import { PushNotificationsService } from 'ng-push';
 import { Router } from '@angular/router';
+import { SocketService } from '../socket.service';
+import { Subscription } from '../../../node_modules/rxjs';
 
 @Component({
   selector: 'app-invs',
@@ -22,46 +24,107 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
   isLoading: boolean = false;
   isFirstLoad: boolean = true;
   refreshLoop: any;
+  invasionStart: Subscription;
+  invasionChange: Subscription;
+  invasionEnd: Subscription;
+  onServerInfo: Subscription;
+  serverInfo: ServerInfo = {
+    population: 0,
+    districts: 0,
+    invasions: 0
+  };
+  timers: object = {};
 
-  constructor(public invasionsService: InvasionsService, private pushNotifications: PushNotificationsService, public router: Router){
+  constructor(public invasionsService: InvasionsService, private pushNotifications: PushNotificationsService, public router: Router, public socketService: SocketService){
     pushNotifications.requestPermission();
     window.addEventListener('resize', this.onResize);
 
 
     this.refresh();
-    let instance = this;
-    this.refreshLoop = setInterval(function(){
-      instance.refresh();
-    }, 25000);
+    // let instance = this;
+    // this.refreshLoop = setInterval(function(){
+    //   instance.refresh();
+    // }, 25000);
 
-    //this.initConnection();
+    this.initConnection();
   }
 
   ngOnDestroy(): void {
-    if(this.refreshLoop)
-      clearInterval(this.refreshLoop);
+    // if(this.refreshLoop)
+    //   clearInterval(this.refreshLoop);
   }
 
-  /*initConnection(){
+  initConnection(){
     this.socketService.initSocket();
-    this.ioConnection = this.socketService.onDistrict().subscribe(
-      district => {
-        // console.log(district);
-      }
-    );
+    
+    if(!this.invasionStart)
+    {
+      this.invasionStart = this.socketService.onInvasionStart().subscribe(
+        res => {
+          // console.log('start');
+          var existingDistrict = this.districts.findIndex(function(district: IDistrict, index: number){ return district.name == res.name;  });
+          if(existingDistrict != -1)
+          {
+            this.districts[existingDistrict] = res;
+          }
+          else
+          {
+            this.notify(res);
+            this.districts.push(res);
+          }
+          this.sortDistricts();
+        }
+      );
 
-    this.socketService.onEvent(Event.CONNECT).subscribe(
-      () => {
-        // console.log('connected');
-      }
-    );
-      
-    this.socketService.onEvent(Event.DISCONNECT).subscribe(
-      () => {
-        // console.log('disconnected');
-      }
-    );
-  }*/
+    }
+
+    if(!this.invasionChange)
+    {
+      this.invasionChange = this.socketService.onInvasionChange().subscribe(
+        res => {
+          // console.log('change');
+
+          var existingDistrict = this.districts.findIndex(function(district: IDistrict, index: number){ return district.name == res.name;  });
+          if(existingDistrict != -1)
+          {
+            // this.districts[existingDistrict] = res;
+            this.districts[existingDistrict].count_defeated = res.count_defeated;
+            this.districts[existingDistrict].remaining_time = res.remaining_time;
+            this.districts[existingDistrict].population = res.population
+          }
+          else
+          {
+            this.districts.push(res);
+          }
+          this.sortDistricts();
+        }
+      );
+
+    }
+
+    if(!this.invasionEnd)
+    {
+      this.invasionEnd = this.socketService.onInvasionEnd().subscribe(
+        res => {
+          // console.log('end');
+          var existingDistrict = this.districts.findIndex(function(district: IDistrict, index: number){ return district.name == res;  });
+          if(existingDistrict != -1)
+          {
+            this.districts.splice(existingDistrict, 1);
+          }
+          this.sortDistricts();
+        }
+      );
+    }
+
+    if(!this.onServerInfo)
+    {
+      this.onServerInfo = this.socketService.onServerInfo().subscribe(
+        res => this.serverInfo = res
+      );
+    }
+
+  }
   
   onResize(){
     this.width = window.innerWidth;
@@ -106,94 +169,60 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  sortDistricts(){
+    this.districts = this.districts.sort(function(a,b) {
+      if (a.remaining_time > b.remaining_time)
+        return 1;
+      if (a.remaining_time < b.remaining_time)
+        return -1;
+      return 0;
+    });
+
+    let instance = this;
+    this.districts.map(function(district: IDistrict, index: number){
+      if(district.cogs_attacking != 'None')
+      {
+        if(instance.timers[district.name])
+          clearInterval(instance.timers[district.name])
+
+
+        instance.timers[district.name] = setInterval(function(){
+        if(district.remaining_time <= 0)
+        {
+          clearInterval(instance.timers[district.name]);
+          instance.districts.splice(index, 1);
+        }
+        else
+          --district.remaining_time;
+        }, 1000);
+      }
+    });
+  }
+  
   refresh(){
-    this.isLoading = true;
+    this.isLoading = false;
     let distCheck = this.invasionsService.getDistrictdata().subscribe(
       res=>{
         // console.log(res);
         if(!res)
           return; 
 
-        if(res.length == 0)
-        {
-          this.lastRequestDown = true;
-          // console.log('servers are probably down.');
-        } 
-        else
-        {
-          if(this.lastRequestDown)
-          {
-            this.pushNotifications.create('Server Status Alert', {body: '\nDistricts are back online.\nServers could possibly also be accessible.', icon: './assets/logo_icon.png'}).subscribe(
-              res => {
-                  if (res.event.type === 'click') {
-                      res.notification.close();
-                  }
-              });
-          }
-          this.lastRequestDown = false;
-          var districts = res.sort(function(a,b) {
-            if (a.population > b.population)
-              return -1;
-            if (a.population < b.population)
-              return 1;
-            return 0;
-          });
-          let instance = this;
-          districts.map(function(district: IDistrict){
-                                  
-            if(!this.districtInvasions[district.name] || this.districtInvasions[district.name] != district.cogs_attacking)
-            {
-              if(district.cogs_attacking == 'None')
-                delete this.districtInvasions[district.name];
-              else
-              {
-                this.districtInvasions[district.name] = district.cogs_attacking;
-                if(this.districts.length > 0)
-                  this.notify(district);
-              }
-            }
+        this.districts = res;
+        this.sortDistricts();
+        distCheck.unsubscribe();
+      },
+      error => {
+        // console.log('error retrieving district data');
+        // console.log(error);
+      }
+    );
 
-            if(district.cogs_attacking != 'None')
-            {
-              var timer = setInterval(function(){
-                if(district.remaining_time <= 0)
-                {
-                  clearInterval(timer);
-                  district.invasion_online = false;
-                  district.cogs_attacking = 'None';
-                }
-                else
-                --district.remaining_time;
-              }, 1000);
-            }
+    let serverCheck = this.invasionsService.getServerInfo().subscribe(
+      res=>{
+        // console.log(res);
+        this.serverInfo = res; 
 
-            if(instance.districts[district.name] && district.last_update === instance.districts[district.name].last_update)
-            {
-              // console.log('hello govna');
-              district = instance.districts[district.name];
-            }
-          }, this);
-          // console.log(this.districtInvasions);
-          
-          var population = 0;
-          var invasions = 0;
-          for(var i = 0; i < districts.length; i++)
-          {
-            population += districts[i].population;
-            if(districts[i].invasion_online)
-            invasions++;
-          }
-          
-          this.population = population;
-          this.invasions = invasions;
-          this.districts = [];
-          this.districts = districts;
-          this.isLoading = false;
-          if(this.isFirstLoad)
-            this.isFirstLoad = false;
-
-          distCheck.unsubscribe();
-        }
+        serverCheck.unsubscribe();
       },
       error => {
         // console.log('error retrieving district data');
@@ -201,4 +230,10 @@ export class InvasionsComponent implements AfterViewInit, OnDestroy {
       }
     );
   }
+}
+
+export interface ServerInfo{
+  population: number;
+  districts: number;
+  invasions: number;
 }
